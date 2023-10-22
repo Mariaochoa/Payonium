@@ -44,3 +44,11 @@ actor PaymentContract {
     
     return false;
   }
+
+  // Función para obtener el saldo de un usuario
+  public query func getBalance() : async [Balance] {
+    let callerPrincipal = Call.caller;
+    let user = users[callerPrincipal]?;
+    return user?.balance;
+  }
+}
