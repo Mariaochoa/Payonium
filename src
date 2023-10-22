@@ -1,6 +1,9 @@
 dfx new Payonium
 cd Payonium
 // src/Payonium/src/main.mo
+
+/* Definición del smart contract */
+
 actor PaymentContract {
   type Balance = {
     amount : Nat;
@@ -14,14 +17,14 @@ actor PaymentContract {
 
   var users : Map Principal User = HashMap.create();
 
-  // Función para registrar un usuario
+  /* Función para registrar un usuario */
   public shared({caller}) func registerUser() : async () {
     let callerPrincipal = caller;
     let newUser = User { principal = callerPrincipal, balance = HashMap.create() };
     users := HashMap.put(callerPrincipal, newUser, users);
   }
 
-  // Función para hacer una transferencia de valor
+  /* Función para hacer una transferencia de valor */
   public shared({caller}) func transfer(receiver : Principal, amount : Nat, currency : Text) : async Bool {
     assert (amount > 0, "La cantidad debe ser mayor que cero.");
     let senderPrincipal = caller;
@@ -45,7 +48,7 @@ actor PaymentContract {
     return false;
   }
 
-  // Función para obtener el saldo de un usuario
+  /* Función para obtener el saldo de un usuario */
   public query func getBalance() : async [Balance] {
     let callerPrincipal = Call.caller;
     let user = users[callerPrincipal]?;
