@@ -1,1 +1,46 @@
+dfx new Payonium
+cd Payonium
+// src/Payonium/src/main.mo
+actor PaymentContract {
+  type Balance = {
+    amount : Nat;
+    currency : Text;
+  };
 
+  type User = {
+    principal : Principal;
+    balance : Map Text Balance;
+  };
+
+  var users : Map Principal User = HashMap.create();
+
+  // Función para registrar un usuario
+  public shared({caller}) func registerUser() : async () {
+    let callerPrincipal = caller;
+    let newUser = User { principal = callerPrincipal, balance = HashMap.create() };
+    users := HashMap.put(callerPrincipal, newUser, users);
+  }
+
+  // Función para hacer una transferencia de valor
+  public shared({caller}) func transfer(receiver : Principal, amount : Nat, currency : Text) : async Bool {
+    assert (amount > 0, "La cantidad debe ser mayor que cero.");
+    let senderPrincipal = caller;
+    let sender = users[senderPrincipal]?;
+    let receiverUser = users[receiver]?;
+    
+    if (sender != null && receiverUser != null) {
+      let senderBalance = HashMap.getOrDefault(currency, { amount = 0, currency = currency }, sender.balance);
+      if (senderBalance.amount >= amount) {
+        let senderNewBalance = { amount = senderBalance.amount - amount, currency = currency };
+        sender.balance := HashMap.put(currency, senderNewBalance, sender.balance);
+        
+        let receiverBalance = HashMap.getOrDefault(currency, { amount = 0, currency = currency }, receiverUser.balance);
+        let receiverNewBalance = { amount = receiverBalance.amount + amount, currency = currency };
+        receiverUser.balance := HashMap.put(currency, receiverNewBalance, receiverUser.balance);
+        
+        return true;
+      }
+    }
+    
+    return false;
+  }
