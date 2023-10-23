@@ -2,6 +2,23 @@ dfx new Payonium
 cd Payonium
 // src/Payonium/src/main.mo
 
+import Array;
+import HashMap;
+import Actor;
+import Principal;
+import Call;
+import let map = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+import Nat "mo:base/Nat";
+import actor (text) : actor { method : () -> async () }
+import Module "canister:";
+import Module "mo:base/Module";
+import actor class Name() = self {
+  stable var state = 0;
+  
+  public func name(input : Text) : async () {
+    
+  };
+};
 /* Definición del smart contract */
 
 actor PaymentContract {
