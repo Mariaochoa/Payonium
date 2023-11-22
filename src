@@ -1,25 +1,17 @@
-import actor (text) : actor { method : () -> async () }
-import Principal.fromText(text)
-import Array;
-import HashMap;
-import Actor;
-import Principal;
-import Call;
-import let map = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+import Array "mo:base/Array";
+import map "mo:base/HashMap";
+import Actor "mo:base/Actor";
+import Principal "mo:base/Principal";
+import Call "mo:base/Call";
 import Nat "mo:base/Nat";
-import actor (text) : actor { method : () -> async () }
 import Module "canister:";
 import Module "mo:base/Module";
-import actor class Name() = self {
-  stable var state = 0;
-  
-  public func name(input : Text) : async () {
-    
-  };
-};
+
 /* Definición del smart contract */
 
 actor PaymentContract {
+
+  let nombre_de_variable = map.HashMap<Text, Nat>(0, Text.equal, Text.hash);
   type Balance = {
     amount : Nat;
     currency : Text;
