@@ -1,0 +1,49 @@
+.App-header {
+    background-color: #944078;
+    padding: 20px
+}
+  
+button {
+    padding: 10px 20px;
+    margin: 10px auto;
+    border: none;
+    background-color: #f4f6f8;
+    color: black;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+}
+
+main {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;          
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    flex-flow: row wrap;
+    max-width: 40vw;
+    margin: auto;
+    align-items: baseline;
+}
+  
+#greeting, #principal{
+  margin: 10px auto;
+  padding: 10px 60px;
+  border: 1px solid #222;
+}
+
+#greeting:empty {
+  display: none;
+}
+
+#principal:empty {
+  display: none;
+}
+  

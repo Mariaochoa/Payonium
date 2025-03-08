@@ -17,7 +17,8 @@
     },
     "payonium_frontend": {
       "dependencies": [
-        "payonium_backend"
+        "payonium_backend",
+        "internet_identity"
       ],
       "source": [
         "src/payonium_frontend/dist"
