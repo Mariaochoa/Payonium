@@ -1,25 +1,52 @@
-import { useState } from 'react';
-import { payonium_backend } from 'declarations/payonium_backend';
+import { useContext, useState } from 'react';
+import LoginButton from './components/auth/LoginButton';
+import LogoutButton from './components/auth/LogoutButton';
+import { AuthContext } from './context/AuthContext';
+import { createActor } from 'declarations/payonium_backend';
+import './App.css';
 
 function App() {
+
+  const { isAuthenticated, identity } = useContext(AuthContext);
+  
+  let canisterId = process.env.CANISTER_ID_PAYONIUM_BACKEND;
+
+  let backend = createActor(canisterId, {
+    agentOptions: {
+      identity: identity,
+      host: "http://localhost:4943",
+    },
+  });
+
   const [greeting, setGreeting] = useState('');
   const [principal, setPrincipal] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.elements.name.value;
-    payonium_backend.greet(name).then((greeting) => {
+
+    if(!isAuthenticated){
+      alert("Por favor, usted debe loguearse primero para ejecutar esta funcion");
+      return;
+    }
+
+    backend.greet(name).then((greeting) => {
       setGreeting(greeting);
     });
     return false;
   }
 
   async function handleWhoAmI() {
-    const principal = await payonium_backend.whoAmI();
+    const principal = await backend.whoAmI();
     setPrincipal(principal.toString());
   }
 
   return (
+    <div >
+      <header className="App-header">
+        {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+        
+      </header>
     <main>
       <img src="/payonium.jpg" alt="PAYONIUM logo" />
       <br />
@@ -38,6 +65,7 @@ function App() {
       <section id="principal">{principal}</section>
 
     </main>
+    </div>
   );
 }
 
