@@ -1,10 +1,13 @@
 
+import Result "mo:base/Result";
 
 module Types {
 
     public type Role = {
         #superadmin;
         #admin;
+        #operator;
+        #assistant;
         #user;
     };
 
@@ -20,4 +23,22 @@ module Types {
         owner: Principal;
         role: Role;
     };
+
+    type GetProfileResultOk = {
+        #profile: Profile;
+        #profiles: [Profile];
+        #userSuccessfullyAdded;
+        #userSuccessfullyDeleted;
+    };
+
+    type GetProfileResultErr = { 
+        #userDoesNotExist;
+        #userNotAuthenticated;
+        #unregisteredUser_nameOrEmailIsInvalid;
+        #countryDataNotFound;
+    };
+
+    public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;
+
+
 }
