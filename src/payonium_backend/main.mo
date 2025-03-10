@@ -4,6 +4,7 @@ import Debug "mo:base/Debug";
 import Types "./types";
 import Map "mo:map/Map";
 import { thash } "mo:map/Map";
+import Iter "mo:base/Iter";
 
 actor {
 
@@ -47,6 +48,13 @@ actor {
 
   };
 
+  //obtencion de registros de usuarios
+  public query ({caller}) func getProfiles(): async Types.GetProfileResult {
+    if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+
+    let profileIter = Map.vals(profiles);
+    return #ok(#profiles(Iter.toArray(profileIter)));
+  }
 
 
 };
