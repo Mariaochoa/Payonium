@@ -39,7 +39,8 @@ actor {
             phone = newProfile.phone;
             password = newProfile.password;
             countryresidence = newProfile.countryresidence;
-            owner = newProfile.owner;
+            //owner = newProfile.owner;
+            owner = caller;
             role = #user; 
       };
 
