@@ -2,6 +2,7 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Debug "mo:base/Debug";
 import Types "./types";
+import Validation "./validation";
 import Map "mo:map/Map";
 import { thash } "mo:map/Map";
 import Iter "mo:base/Iter";
@@ -23,7 +24,12 @@ actor {
   public shared ({caller}) func registerUser(newProfile: Types.Profile) : async Types.GetProfileResult {
     if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
-    if(true){
+    let isEmailValid = Validation.validateEmail(newProfile.email);
+    let isNameValid = Validation.validateName(newProfile.name);
+    let isLastNameValid = Validation.validateName(newProfile.lastname);
+    let isCountryOriginDocumentValid = Validation.validateCountry(newProfile.countryorigindocument);
+
+    if(isNameValid and isEmailValid and isLastNameValid and isCountryOriginDocumentValid){
       var profileWithRole = {
             name = newProfile.name;
             lastname = newProfile.lastname;
@@ -44,7 +50,6 @@ actor {
       Debug.print("no se registro al usuario");
       return #err(#unregisteredUser_nameOrEmailIsInvalid);
     }
-
 
   };
 
