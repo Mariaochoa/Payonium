@@ -1,6 +1,8 @@
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 
+
+
 actor {
 
   public shared query ({caller}) func greet(name : Text) : async Text {
@@ -12,6 +14,7 @@ actor {
     return msg.caller;
   };
   
+ 
 
 };
 
