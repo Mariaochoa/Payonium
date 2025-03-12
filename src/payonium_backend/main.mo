@@ -20,6 +20,19 @@ actor {
   
   stable var profiles =Map.new<Text, Types.Profile>();
 
+
+  // Función para convertir Text a Role
+  func textToRole(roleText : Text) : ?Types.Role {
+    switch (roleText) {
+      case ("superadmin") { ?#superadmin };
+      case ("admin") { ?#admin };
+      case ("operator") { ?#operator };
+      case ("assistant") { ?#assistant };
+      case ("user") { ?#user };
+      case (_) { null }; // Si no coincide, retornamos null
+    }
+  };
+
   //registro de usuarios
   public shared ({caller}) func registerUser(newProfile: Types.Profile) : async Types.GetProfileResult {
     if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
@@ -30,6 +43,12 @@ actor {
     let isCountryOriginDocumentValid = Validation.validateCountry(newProfile.countryorigindocument);
 
     if(isNameValid and isEmailValid and isLastNameValid and isCountryOriginDocumentValid){
+
+      let role = switch (textToRole(newProfile.role)){
+        case (?r) {r};
+        case (null) { return #err(#unregisteredUser_invelidRole)};
+      };
+
       var profileWithRole = {
             name = newProfile.name;
             lastname = newProfile.lastname;
@@ -41,7 +60,8 @@ actor {
             countryresidence = newProfile.countryresidence;
             //owner = newProfile.owner;
             owner = caller;
-            role = #user; 
+            role = newProfile.role;
+
       };
 
       Map.set(profiles, thash, newProfile.email, profileWithRole);

@@ -22,6 +22,15 @@ function App() {
   const [principal, setPrincipal] = useState('');
   const [profiles, setProfiles] = useState([]);
 
+  const [name, setName] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [dni, setDni] = useState('');
+  const [countryorigindocument, setCountryorigindocument] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [countryresidence, setCountryresidence] = useState('');
+
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.elements.name.value;
@@ -57,6 +66,36 @@ function App() {
         console.log(err);
     };
   };
+
+  async function registerUser(event) {
+    event.preventDefault();
+    if (!isAuthenticated) {
+      alert("Debe estar logueado para registrar un usuario.");
+      return;
+    }
+
+    const newProfile = {
+      name, lastname, email, dni, countryorigindocument, phone, password, countryresidence, 
+      owner: identity.getPrincipal(), 
+      role: 'user',
+    };
+    try {
+      console.log(newProfile);
+      const result = await backend.registerUser(newProfile);
+      if(result) {
+        alert("usuario registrado exitosamente");
+
+      }else {
+        alert("error en el registro: " + result.err)
+      };
+    } catch (err) {
+      console.log(err)
+    }
+    
+  }
+
+
+
 
   return (
     <div >
@@ -98,14 +137,42 @@ function App() {
                   <span>Password: {profile.password}</span><br />
                   <span>Country of Residence: {profile.countryresidence}</span><br />
                   <span>Owner: {JSON.stringify(profile.owner)}</span><br />
-                  <span>Role: {Object.keys(profile.role).find(key => profile.role[key] === null) }</span><br />
-
+                  <span>Role: {profile.role}</span><br />
                 </li>
               ))}
             </ul>
         
         </section>
 
+        <label>Registro de Usuario</label>
+        <br />
+        <form onSubmit={registerUser}>
+          <input
+            type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required
+          />
+          <input
+            type="text" placeholder="Lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} required
+          />
+          <input
+            type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required
+          />
+          <input
+            type="text" placeholder="DNI" value={dni} onChange={(e) => setDni(e.target.value)} required
+          />
+          <input
+            type="text" placeholder="Country origin ID" value={countryorigindocument} onChange={(e) => setCountryorigindocument(e.target.value)}  required
+          />
+          <input
+            type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required
+          />
+          <input
+            type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required
+          />
+          <input
+            type="text" placeholder="Country residence" value={countryresidence} onChange={(e) => setCountryresidence(e.target.value)} required
+          />
+          <button type="submit">Registrar Usuario</button>
+        </form>
     </main>
     </div>
   );
