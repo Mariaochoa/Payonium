@@ -2,6 +2,10 @@
     background-color: #201a5e;
     padding: 20px
 }
+
+body {
+  margin-top: 90px;
+}
   
 button {
     padding: 10px 20px;
