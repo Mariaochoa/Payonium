@@ -1,5 +1,5 @@
 .App-header {
-    background-color: #944078;
+    background-color: #201a5e;
     padding: 20px
 }
   
@@ -47,3 +47,7 @@ form {
   display: none;
 }
   
+.logopayonium {
+  width: 250px;
+  height: auto;
+}
