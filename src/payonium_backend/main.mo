@@ -37,12 +37,14 @@ actor {
   public shared ({caller}) func registerUser(newProfile: Types.Profile) : async Types.GetProfileResult {
     if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
-    let isEmailValid = Validation.validateEmail(newProfile.email);
-    let isNameValid = Validation.validateName(newProfile.name);
-    let isLastNameValid = Validation.validateName(newProfile.lastname);
-    let isCountryOriginDocumentValid = Validation.validateCountry(newProfile.countryorigindocument);
+    // let isEmailValid = Validation.validateEmail(newProfile.email);
+    // let isNameValid = Validation.validateName(newProfile.name);
+    // let isLastNameValid = Validation.validateName(newProfile.lastname);
+    // let isCountryOriginDocumentValid = Validation.validateCountry(newProfile.countryorigindocument);
 
-    if(isNameValid and isEmailValid and isLastNameValid and isCountryOriginDocumentValid){
+    //if(isNameValid and isEmailValid and isLastNameValid and isCountryOriginDocumentValid){
+
+    if(newProfile.email != "") {
 
       let role = switch (textToRole(newProfile.role)){
         case (?r) {r};
