@@ -21,15 +21,21 @@ const Navbar = () => {
             <ul className={styles.navbarLinks}>
 
                 <li><Link to='/'>Home</Link></li>
-                <li><Link to='cart'>Profile</Link></li>
-                <li><Link to='contact'>Contact</Link></li>
+                {isAuthenticated && (
+                    <>
+                        <li><Link to='profile'>Profile</Link></li>
+                        <li><Link to='operation'>Operations</Link></li>
+                    </>
+                )}
                 <li><Link to='about'>About</Link></li>
+                <li><Link to='contact'>Contact</Link></li>
                 {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
                 {!isAuthenticated ? (
                     <li><Link to='/' onClick={login}>Login</Link></li>
                 ) : (
                     <li><Link to='/' onClick={handleLogout}>Logout</Link></li>
                 )}
+                
 
             </ul>
         </nav>

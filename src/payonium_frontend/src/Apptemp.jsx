@@ -147,30 +147,14 @@ function Apptemp() {
         <label>Registro de Usuario</label>
         <br />
         <form onSubmit={registerUser}>
-          <input
-            type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required
-          />
-          <input
-            type="text" placeholder="Lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} required
-          />
-          <input
-            type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required
-          />
-          <input
-            type="text" placeholder="DNI" value={dni} onChange={(e) => setDni(e.target.value)} required
-          />
-          <input
-            type="text" placeholder="Country origin ID" value={countryorigindocument} onChange={(e) => setCountryorigindocument(e.target.value)}  required
-          />
-          <input
-            type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required
-          />
-          <input
-            type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required
-          />
-          <input
-            type="text" placeholder="Country residence" value={countryresidence} onChange={(e) => setCountryresidence(e.target.value)} required
-          />
+          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input type="text" placeholder="Lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} required />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="text" placeholder="DNI" value={dni} onChange={(e) => setDni(e.target.value)} required />
+          <input type="text" placeholder="Country origin ID" value={countryorigindocument} onChange={(e) => setCountryorigindocument(e.target.value)}  required />
+          <input type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="text" placeholder="Country residence" value={countryresidence} onChange={(e) => setCountryresidence(e.target.value)} required />
           <button type="submit">Registrar Usuario</button>
         </form>
     </main>
