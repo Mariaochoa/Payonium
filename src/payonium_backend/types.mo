@@ -21,7 +21,7 @@ module Types {
         password: Text;
         countryresidence: Text;
         owner: Principal;
-        role: Role;
+        role: Text;
     };
 
     type GetProfileResultOk = {
@@ -36,6 +36,7 @@ module Types {
         #userNotAuthenticated;
         #unregisteredUser_nameOrEmailIsInvalid;
         #countryDataNotFound;
+        #unregisteredUser_invelidRole
     };
 
     public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;

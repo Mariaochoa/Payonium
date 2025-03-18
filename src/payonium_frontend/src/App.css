@@ -1,6 +1,10 @@
 .App-header {
-    background-color: #944078;
+    background-color: #201a5e;
     padding: 20px
+}
+
+body {
+  margin-top: 90px;
 }
   
 button {
@@ -47,3 +51,7 @@ form {
   display: none;
 }
   
+.logopayonium {
+  width: 250px;
+  height: auto;
+}
