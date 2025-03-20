@@ -25,6 +25,7 @@ target/
 node_modules/
 dist/
 .svelte-kit/
+*.vite/
 
 # environment variables
 .env

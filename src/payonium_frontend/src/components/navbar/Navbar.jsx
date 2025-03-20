@@ -15,7 +15,7 @@ const Navbar = () => {
     return (
         <nav className={styles.navbar}>
             <div>
-                <img src="/logopy.png" className={styles.navbarlogo} alt="logo" />
+                <img src="/logopy2.png" className={styles.navbarlogo} alt="logo" />
             </div>
 
             <ul className={styles.navbarLinks}>

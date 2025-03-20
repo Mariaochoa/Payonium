@@ -22,6 +22,9 @@ module Types {
         countryresidence: Text;
         owner: Principal;
         role: Text;
+        bankaccount: Text;
+        depositcurrency: Text;
+        
     };
 
     type GetProfileResultOk = {

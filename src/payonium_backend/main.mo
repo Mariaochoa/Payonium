@@ -1,3 +1,4 @@
+//Gustavo Fuentes Gonzales
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Debug "mo:base/Debug";
@@ -63,7 +64,9 @@ actor {
             //owner = newProfile.owner;
             owner = caller;
             role = newProfile.role;
-
+            bankaccount = newProfile.bankaccount;
+            depositcurrency = newProfile.depositcurrency;
+        
       };
 
       Map.set(profiles, thash, newProfile.email, profileWithRole);

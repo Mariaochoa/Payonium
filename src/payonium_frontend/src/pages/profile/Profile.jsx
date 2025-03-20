@@ -92,7 +92,7 @@ function Profile() {
       </div>
       
 
-        <div>
+        <div className={styles.getProfilesWrapper}>
           <button onClick={getProfiles}>Get User Profiles</button>
         </div>
         <section id="profiles">
@@ -115,6 +115,8 @@ function Profile() {
         
         </section>
 
+        <div className={styles.formWrapper}>
+
         <label>User registration</label>
         <br />
         <form onSubmit={registerUser}>
@@ -132,6 +134,7 @@ function Profile() {
           </div>
           
         </form>
+        </div>
 
     </div>
   );

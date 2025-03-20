@@ -17,7 +17,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Router />
-        <Apptemp />
+        {/* <Apptemp /> */}
       </BrowserRouter>
 
     </div>

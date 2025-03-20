@@ -4,6 +4,9 @@ import styles from "./Home.module.css"; // Asegúrate de tener los estilos corre
 const Home = () => {
   return (
     <div className={styles.container}>
+
+      <img src="/logopy.png" alt="PAYONIUM logo" className={styles.logopayonium2}/>
+
       <h1 className={styles.title}>Bienvenido a Payonium</h1>
       <p className={styles.subtitle}>Transformando los pagos transfronterizos para tu negocio</p>
 
