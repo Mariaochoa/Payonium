@@ -2,17 +2,21 @@
   "canisters": {
     "internet_identity": {
       "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz",
+      "type": "custom",
       "frontend": {},
       "remote": {
         "id": {
           "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
         }
-      },
-      "type": "custom",
-      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+      }
     },
     "payonium_backend": {
       "main": "src/payonium_backend/main.mo",
+      "type": "motoko"
+    },
+    "data": {
+      "main": "src/payonium_backend/data.mo",
       "type": "motoko"
     },
     "payonium_frontend": {

@@ -21,10 +21,14 @@ module Types {
         password: Text;
         countryresidence: Text;
         owner: Principal;
-        role: Text;
-        bankaccount: Text;
+        role: Text;        
+    };
+
+    public type Account = {
+        namebankaccount: Text;
+        simpleaccountnumber: Text;
+        longaccountnumber: Text;
         depositcurrency: Text;
-        
     };
 
     type GetProfileResultOk = {
@@ -32,6 +36,8 @@ module Types {
         #profiles: [Profile];
         #userSuccessfullyAdded;
         #userSuccessfullyDeleted;
+
+        #accountSuccessfullyAdded;
     };
 
     type GetProfileResultErr = { 
@@ -39,10 +45,13 @@ module Types {
         #userNotAuthenticated;
         #unregisteredUser_nameOrEmailIsInvalid;
         #countryDataNotFound;
-        #unregisteredUser_invelidRole
+        #unregisteredUser_invelidRole;
+
+        #invalidAccount
     };
 
     public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;
+
 
 
 }

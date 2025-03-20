@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-
 import { AuthContext } from './context/AuthContext';
 import { createActor } from 'declarations/payonium_backend';
 import './App.css';

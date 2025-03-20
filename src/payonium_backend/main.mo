@@ -63,10 +63,7 @@ actor {
             countryresidence = newProfile.countryresidence;
             //owner = newProfile.owner;
             owner = caller;
-            role = newProfile.role;
-            bankaccount = newProfile.bankaccount;
-            depositcurrency = newProfile.depositcurrency;
-        
+            role = newProfile.role;        
       };
 
       Map.set(profiles, thash, newProfile.email, profileWithRole);
