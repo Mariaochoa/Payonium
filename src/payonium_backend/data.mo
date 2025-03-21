@@ -23,9 +23,9 @@ actor Data{
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         // Verifica que el propietario de la cuenta sea el que está llamando
-        if (newAccount.owner != caller) {
-            return #err(#youAreNotTheOwnerOfThisAccount);
-        };
+        // if (newAccount.owner != caller) {
+        //     return #err(#youAreNotTheOwnerOfThisAccount);
+        // };
 
         return await internalAddAccount(newAccount);
     };
@@ -58,9 +58,9 @@ actor Data{
         for (i in Iter.range(0, Array.size(accounts) - 1)) {
             let account = accounts[i];  // Accedemos a cada cuenta por su índice
             if (account.simpleaccountnumber == simpleaccountnumber) {
-                if (account.owner != caller) {
-                    return #err(#youAreNotTheOwnerOfThisAccount);
-                };
+                // if (account.owner != caller) {
+                //     return #err(#youAreNotTheOwnerOfThisAccount);
+                // };
                 accountFound := true;
             } else {
                 updatedAccounts := Array.append(updatedAccounts, [account]);
@@ -85,9 +85,9 @@ actor Data{
                 return #err(#noAccountFound);
             };
             case (?account) {
-                if (account.owner != caller) {
-                    return #err(#youAreNotTheOwnerOfThisAccount);
-                };
+                // if (account.owner != caller) {
+                //     return #err(#youAreNotTheOwnerOfThisAccount);
+                // };
                 return #ok(#accounts([account]));
             };
         };
@@ -103,9 +103,9 @@ actor Data{
         for (i in Iter.range(0, Array.size(accounts) - 1)) {
             let account = accounts[i];
             if (account.simpleaccountnumber == simpleaccountnumber) {
-                if (account.owner != caller) {
-                    return #err(#youAreNotTheOwnerOfThisAccount); 
-                };
+                // if (account.owner != caller) {
+                //     return #err(#youAreNotTheOwnerOfThisAccount); 
+                // };
 
                 let updatedAccountWithOldSimpleAccountNumber = {
                     namebankaccount = updatedAccount.namebankaccount;
