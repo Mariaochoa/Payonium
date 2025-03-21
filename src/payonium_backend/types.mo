@@ -1,5 +1,6 @@
 
 import Result "mo:base/Result";
+import Principal "mo:base/Principal";
 
 module Types {
 
@@ -29,6 +30,7 @@ module Types {
         simpleaccountnumber: Text;
         longaccountnumber: Text;
         depositcurrency: Text;
+        owner: Principal;
     };
 
     type GetProfileResultOk = {
@@ -37,7 +39,10 @@ module Types {
         #userSuccessfullyAdded;
         #userSuccessfullyDeleted;
 
+        #accounts: [Account];
         #accountSuccessfullyAdded;
+        #accountSuccessfullyDeleted;
+        #accountSuccessfullyUpdated;
     };
 
     type GetProfileResultErr = { 
@@ -47,7 +52,9 @@ module Types {
         #countryDataNotFound;
         #unregisteredUser_invelidRole;
 
-        #invalidAccount
+        #invalidAccount;
+        #noAccountFound;
+        #youAreNotTheOwnerOfThisAccount;
     };
 
     public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;
