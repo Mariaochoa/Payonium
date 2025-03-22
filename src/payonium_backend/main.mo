@@ -68,7 +68,8 @@ actor {
             role = newProfile.role;        
       };
 
-      Map.set(profiles, thash, newProfile.email, profileWithRole);
+      //Map.set(profiles, thash, newProfile.email, profileWithRole);
+      Map.set(profiles, thash, newProfile.dni, profileWithRole);
       Debug.print("se registro el usuario: " # newProfile.name);
       return #ok(#userSuccessfullyAdded);
     } else {
@@ -98,14 +99,14 @@ actor {
   };
 
   // **************
-  public shared (msg) func getAccountsByPrincipal(userEmail: Text): async Types.GetProfileResult {
+  public shared (msg) func getMyAccounts(userDni: Text): async Types.GetProfileResult {
     if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);  // Validación de autenticación
 
     Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
 
     //let principalKey = Principal.toText(userPrincipal);
 
-    let maybeProfile = Map.get(profiles, thash, userEmail);
+    let maybeProfile = Map.get(profiles, thash, userDni);
 
     switch (maybeProfile) {
             case (null) {
