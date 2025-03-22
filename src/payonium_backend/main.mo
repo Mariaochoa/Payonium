@@ -6,7 +6,9 @@ import Types "./types";
 import Validation "./validation";
 import Map "mo:map/Map";
 import { thash } "mo:map/Map";
+import { phash } "mo:map/Map";
 import Iter "mo:base/Iter";
+import Data "canister:data";
 
 actor {
 
@@ -82,7 +84,98 @@ actor {
 
     let profileIter = Map.vals(profiles);
     return #ok(#profiles(Iter.toArray(profileIter)));
-  }
+  };
+
+
+  //Manejo de cuentas
+
+  public shared ({caller}) func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
+    if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+
+    if(newAccount.owner != caller) return #err(#youAreNotTheOwnerOfThisAccount);
+
+    return await Data.addAccount(newAccount);
+  };
+
+  // **************
+  public shared (msg) func getAccountsByPrincipal(userEmail: Text): async Types.GetProfileResult {
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);  // Validación de autenticación
+
+    Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+    //let principalKey = Principal.toText(userPrincipal);
+
+    let maybeProfile = Map.get(profiles, thash, userEmail);
+
+    switch (maybeProfile) {
+            case (null) {
+                return #err(#userDoesNotExist);
+            };
+            case (?profile) {
+                //retorna las tareas de un usuario paticular
+                let userAccount = await Data.getAccountsByPrincipal(profile.owner);
+                //return #ok(userTasks);
+                return #ok(#accounts(userAccount));
+            };
+        };
+
+  };
+
+
+
+
+
+
+// Función para eliminar una cuenta
+  // public shared ({caller}) func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
+  //   if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);  // Validación de autenticación
+
+  //   // Se valida que el propietario de la cuenta sea el que está llamando
+  //   let result = await Data.getAccountByNumber(simpleaccountnumber);
+  //   switch(result) {
+  //     case #err(_err) { return result; };  // Si no se encuentra la cuenta, retornar el error
+  //     case #ok(?accounts) {
+  //       let account = accounts[0]; // Suponemos que la función getAccountByNumber devuelve solo una cuenta
+  //       if (account.owner != caller) {
+  //         return #err(#youAreNotTheOwnerOfThisAccount);  // Validación de propietario
+  //       }
+  //     };
+  //   }
+
+  //   // Llamada a la función de data.mo para eliminar la cuenta
+  //   return await Data.delAccount(simpleaccountnumber);
+  // };
+
+  // // Función para obtener una cuenta por número de cuenta
+  // public query ({caller}) func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
+  //   if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);  // Validación de autenticación
+
+  //   // Llamada a la función de data.mo para obtener una cuenta por su número
+  //   return await Data.getAccountByNumber(simpleaccountnumber);
+  // };
+
+  // // Función para actualizar una cuenta
+  // public shared ({caller}) func updateAccount(simpleaccountnumber: Text, updatedAccount: Types.Account): async Types.GetProfileResult {
+  //   if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);  // Validación de autenticación
+
+  //   // Verifica que el propietario de la cuenta sea el que está llamando
+  //   let result = await Data.getAccountByNumber(simpleaccountnumber);
+  //   switch(result) {
+  //     case #err(_err) { return result; };  // Si no se encuentra la cuenta, retornar el error
+  //     case #ok(?accounts) {
+  //       let account = accounts[0];  // Suponemos que la función getAccountByNumber devuelve solo una cuenta
+  //       if (account.owner != caller) {
+  //         return #err(#youAreNotTheOwnerOfThisAccount);  // Validación de propietario
+  //       }
+  //     };
+  //   }
+
+  //   // Llamada a la función de data.mo para actualizar la cuenta
+  //   return await Data.updateAccount(simpleaccountnumber, updatedAccount);
+  // };
+
+
+
 
 
 };

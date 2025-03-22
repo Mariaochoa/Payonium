@@ -1,15 +1,12 @@
 import Principal "mo:base/Principal";
 import Types "./types";
-import Map "mo:map/Map";
-import { thash } "mo:map/Map";
 import Iter "mo:base/Iter";
-import Result "mo:base/Result";
 import Debug "mo:base/Debug";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
 
 
-actor Data{
+actor Data {
 
     stable var accounts: [Types.Account] = [];
 
@@ -19,7 +16,8 @@ actor Data{
         return #ok(#accountSuccessfullyAdded);
     };
 
-    public shared ({caller}) func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
+    //public shared ({caller}) func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
+    public shared func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         // Verifica que el propietario de la cuenta sea el que está llamando
@@ -34,21 +32,22 @@ actor Data{
         return accounts;
     };
 
-    public query ({caller}) func getAccountsByPrincipal(): async Types.GetProfileResult {
+    //****************** esta igual a task
+    public query func getAccountsByPrincipal(owner: Principal): async [Types.Account] {   //query  shared ({caller}) 
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
+        Debug.print("Principal que llama desde data: " # Principal.toText(owner));
+
         // Filtramos las cuentas asociadas al 'caller' (usuario actual)
-        let userAccounts = Array.filter<Types.Account>(accounts, func (account) { account.owner == caller });
+        let userAccounts = Array.filter<Types.Account>(accounts, func (account) { account.owner == owner });
 
-        if (Array.size(userAccounts) == 0) {
-            return #err(#noAccountFound);
-        };
+        return userAccounts;
 
-        return #ok(#accounts(userAccounts));
     };
 
 
-    public shared ({caller}) func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
+    //public shared ({caller}) func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
+    public shared func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
         // if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         var accountFound = false;
@@ -75,7 +74,8 @@ actor Data{
         }
     };
 
-    public query ({caller}) func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
+    //public query ({caller}) func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
+    public query func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         let maybeAccount = Array.find<Types.Account>(accounts, func (account) { account.simpleaccountnumber == simpleaccountnumber });

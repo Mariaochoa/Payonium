@@ -39,6 +39,7 @@ module Types {
         #userSuccessfullyAdded;
         #userSuccessfullyDeleted;
 
+        #account: Account;
         #accounts: [Account];
         #accountSuccessfullyAdded;
         #accountSuccessfullyDeleted;
