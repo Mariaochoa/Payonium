@@ -27,6 +27,10 @@ dist/
 .svelte-kit/
 *.vite/
 
+# backend code
+**/mainbackup.mo
+**/databackup.mo
+
 # environment variables
 .env
 
@@ -34,3 +38,5 @@ dist/
 
 
 .mops
+
+

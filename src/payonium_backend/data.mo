@@ -16,7 +16,7 @@ actor Data {
         return #ok(#accountSuccessfullyAdded);
     };
 
-    //public shared ({caller}) func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
+   
     public shared func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
@@ -32,13 +32,12 @@ actor Data {
         return accounts;
     };
 
-    //****************** esta igual a task
+
     public query func getAccountsByPrincipal(owner: Principal): async [Types.Account] {   //query  shared ({caller}) 
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         Debug.print("Principal que llama desde data: " # Principal.toText(owner));
 
-        // Filtramos las cuentas asociadas al 'caller' (usuario actual)
         let userAccounts = Array.filter<Types.Account>(accounts, func (account) { account.owner == owner });
 
         return userAccounts;
@@ -46,16 +45,15 @@ actor Data {
     };
 
 
-    //public shared ({caller}) func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
+  
     public shared func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
         // if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         var accountFound = false;
         var updatedAccounts: [Types.Account] = [];
 
-        // Usamos Iter.range para iterar sobre el arreglo de cuentas
         for (i in Iter.range(0, Array.size(accounts) - 1)) {
-            let account = accounts[i];  // Accedemos a cada cuenta por su índice
+            let account = accounts[i];  
             if (account.simpleaccountnumber == simpleaccountnumber) {
                 // if (account.owner != caller) {
                 //     return #err(#youAreNotTheOwnerOfThisAccount);
@@ -74,7 +72,6 @@ actor Data {
         }
     };
 
-    //public query ({caller}) func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
     public query func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
@@ -128,5 +125,22 @@ actor Data {
             return #err(#noAccountFound);
         }
     };
+
+//Registro de Operaciones
+
+    stable var orders: [Types.Order] = [];
+
+    private func internalAddOrder(newOrder: Types.Order): async Types.GetOrderResult {
+        orders := Array.append(orders, [newOrder]);
+        return #ok(#orderSuccessfullyAdded);
+    };
+
+    public func registerPaymentOrder(newOrder: Types.Order): async Types.GetOrderResult {
+        //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+        return await internalAddOrder(newOrder);
+
+    }
+
+    
 
 }
