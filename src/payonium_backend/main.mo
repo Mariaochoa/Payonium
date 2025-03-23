@@ -12,17 +12,16 @@ import Data "canister:data";
 
 actor {
 
-  public shared query ({caller}) func greet(name : Text) : async Text {
-    if(Principal.isAnonymous(caller)) return "No tiene permiso para usar este funcion";
-    return "Hello Payonium user: " # name # "!";
-  };
+  // public shared query ({caller}) func greet(name : Text) : async Text {
+  //   if(Principal.isAnonymous(caller)) return "No tiene permiso para usar este funcion";
+  //   return "Hello Payonium user: " # name # "!";
+  // };
 
   public shared query (msg) func whoAmI(): async Principal{
     return msg.caller;
   };
   
   stable var profiles =Map.new<Text, Types.Profile>();
-
 
   // Función para convertir Text a Role
   func textToRole(roleText : Text) : ?Types.Role {
@@ -47,7 +46,7 @@ actor {
 
     //if(isNameValid and isEmailValid and isLastNameValid and isCountryOriginDocumentValid){
 
-    if(newProfile.email != "") {
+    if(newProfile.dni != "") {
 
       let role = switch (textToRole(newProfile.role)){
         case (?r) {r};
@@ -65,11 +64,12 @@ actor {
             countryresidence = newProfile.countryresidence;
             //owner = newProfile.owner;
             owner = caller;
-            role = newProfile.role;        
+            role = newProfile.role;     
+            principal = newProfile.principal;   
       };
 
       //Map.set(profiles, thash, newProfile.email, profileWithRole);
-      Map.set(profiles, thash, newProfile.dni, profileWithRole);
+      Map.set(profiles, thash, newProfile.principal, profileWithRole);
       Debug.print("se registro el usuario: " # newProfile.name);
       return #ok(#userSuccessfullyAdded);
     } else {
@@ -88,8 +88,42 @@ actor {
   };
 
 
-  //Manejo de cuentas
+  // función para obtener el perfil de un usuario (solo el propio)
+  public shared ({caller}) func getMyProfile(principal: Text): async Types.GetProfileResult {
+      if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
+      Debug.print("el principal text es: " # principal);
+      // Convertimos el principal del caller a texto
+      // let callerText = Principal.toText(caller);
+
+      // Debug.print("el principal text es: " # callerText);
+      
+      // Buscamos el perfil del usuario que hace la solicitud
+      let maybeProfile = Map.get(profiles, thash, principal);
+
+      switch (maybeProfile) {
+          case (null) {
+              Debug.print("No se encontró el perfil para el principal: " # principal);
+              return #err(#userDoesNotExist); // Si el perfil no existe, retornamos un error
+          };
+          case (?profile) {
+               let profileText = "Nombre: " # profile.name # ", Apellido: " # profile.lastname # 
+                        ", Email: " # profile.email # ", DNI: " # profile.dni # 
+                        ", País de origen: " # profile.countryorigindocument # 
+                        ", Teléfono: " # profile.phone # ", País de residencia: " # profile.countryresidence # 
+                        ", Rol: " # profile.role;
+
+                // Imprimir el perfil completo como texto
+                Debug.print("Perfil encontrado: " # profileText);
+              // Si el perfil existe, lo retornamos
+              return #ok(#profile(profile));       //return #ok(profile);   #ok(#profile(profile));
+          };
+      };
+  };
+
+
+
+  //Manejo de cuentas
   public shared ({caller}) func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
     if(Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 

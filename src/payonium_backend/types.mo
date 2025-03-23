@@ -22,7 +22,8 @@ module Types {
         password: Text;
         countryresidence: Text;
         owner: Principal;
-        role: Text;        
+        role: Text;  
+        principal: Text;      
     };
 
     public type Account = {

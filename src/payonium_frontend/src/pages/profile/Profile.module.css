@@ -1,11 +1,4 @@
-/* Centrar todo el contenido en la página */
-.container {
-  display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start;     
-  min-height: 100vh;
-  flex-direction: column;
-}
+
   
   /* Centrando el contenido de la sección */
   .profileSection {
@@ -73,4 +66,44 @@
   grid-column: span 2; 
   width: 100%;
 }
+
+/* Estilo para el contenido del perfil */
+.profileDisplay {
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto; /* Centrado horizontal */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Estilo para el mensaje si no hay perfil */
+.noProfile {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.profiles {
+  display: block; 
+  width: 100%;
+  max-width: 800px; 
+  margin: 20px auto; 
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  text-align: left; 
+}
+
+
+
+.profiles li {
+  margin-bottom: 15px; /* Espaciado entre los elementos de la lista */
+  display: block; /* Asegura que cada <li> se muestra como un bloque */
+}
+
 
