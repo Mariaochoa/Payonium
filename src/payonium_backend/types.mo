@@ -53,6 +53,7 @@ module Types {
         #unregisteredUser_nameOrEmailIsInvalid;
         #countryDataNotFound;
         #unregisteredUser_invelidRole;
+        #userAlreadyExists;
 
         #invalidAccount;
         #noAccountFound;
@@ -61,6 +62,30 @@ module Types {
 
     public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;
 
+    public type Order = {
+        amount: Nat;
+        currency: Text;
+        account: Text;
+        description: Text;
+        dni: Text;
+        email: Text;
+    };
+
+type GetOrderResultOk = {
+        #order: Order;
+        #orders: [Order];
+        #orderSuccessfullyAdded;
+        #orderSuccessfullyComplete;
+
+    };
+
+    type GetOrderResultErr = { 
+        #invalidOrder;
+        #noOrderFound;
+        #youAreNotTheOwnerOfThisOrder;
+    };
+
+    public type GetOrderResult = Result.Result<GetOrderResultOk, GetOrderResultErr>;
 
 
 }
