@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    justify-content: center;   /* Centra horizontalmente */
+    align-items: center;       /* Centra verticalmente */
+
+    text-align: center;        /* Centra el texto dentro del contenedor */
+    flex-direction: column;    /* Asegura que los elementos se apilen verticalmente */
+  }
+  
+
