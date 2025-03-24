@@ -24,7 +24,7 @@ actor {
       case ("operator") { ?#operator };
       case ("assistant") { ?#assistant };
       case ("user") { ?#user };
-      case (_) { null }; 
+      case (_) { null };
     };
   };
 
@@ -53,7 +53,6 @@ actor {
         role = newProfile.role;
         principal = newProfile.principal;
       };
-
 
       Map.set(profiles, thash, newProfile.principal, profileWithRole);
       Debug.print("se registro el usuario: " # newProfile.name);
@@ -84,11 +83,11 @@ actor {
     switch (maybeProfile) {
       case (null) {
         Debug.print("No se encontró el perfil para el principal: " # principal);
-        return #err(#userDoesNotExist); 
+        return #err(#userDoesNotExist);
       };
       case (?profile) {
 
-        return #ok(#profile(profile)); 
+        return #ok(#profile(profile));
       };
     };
   };
@@ -103,7 +102,7 @@ actor {
   };
 
   public shared (msg) func getMyAccounts(userDni : Text) : async Types.GetProfileResult {
-    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated); // Validación de autenticación
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated); 
 
     Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
 
@@ -122,14 +121,34 @@ actor {
 
   };
 
+  //Funciones para agregar ordenes
 
+  public shared ({ caller }) func isUserActive(principal : Text) : async Bool {
+    let maybeProfile = Map.get(profiles, thash, principal);
 
+    switch (maybeProfile) {
+      case (null) {
+      Debug.print("Perfil no encontrado para el usuario: " # principal);
+      return false;
+      };
+      case (?profile){
+        return true;    // profile.status;
+      };
+    };
+  };
 
+  public shared ({caller}) func registerOrder(newOrder: Types.Order) : async Types.GetOrderResult {
+    if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated); 
 
-
-
-
-
-
+    let isActive = await isUserActive(Principal.toText(caller));
+    if (isActive){
+      Debug.print("El perfil está activo. Registrando la orden de pago...");
+      // PENDIENTE await Data.registerPaymentOrder(newOrder);
+      return #ok(#orderSuccessfullyAdded)
+    } else {
+      Debug.print("El perfil no está activo.");
+      return #err(#userDoesNotActiveOrNotExist);
+    }
+  }
 
 };

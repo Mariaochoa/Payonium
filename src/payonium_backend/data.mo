@@ -5,19 +5,18 @@ import Debug "mo:base/Debug";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
 
-
 actor Data {
 
-    stable var accounts: [Types.Account] = [];
+    stable var accounts : [Types.Account] = [];
+    stable var orders : [Types.Order] = [];
 
-    private func internalAddAccount(newAccount: Types.Account): async Types.GetProfileResult {
+    private func internalAddAccount(newAccount : Types.Account) : async Types.GetProfileResult {
         accounts := Array.append(accounts, [newAccount]);
         Debug.print("Cuenta bancaria registrada para el Principal: " # Principal.toText(newAccount.owner));
         return #ok(#accountSuccessfullyAdded);
     };
 
-   
-    public shared func addAccount(newAccount: Types.Account): async Types.GetProfileResult {
+    public shared func addAccount(newAccount : Types.Account) : async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         // Verifica que el propietario de la cuenta sea el que está llamando
@@ -28,32 +27,30 @@ actor Data {
         return await internalAddAccount(newAccount);
     };
 
-    public query func getAllAccounts(): async [Types.Account] {
+    public query func getAllAccounts() : async [Types.Account] {
         return accounts;
     };
 
-
-    public query func getAccountsByPrincipal(owner: Principal): async [Types.Account] {   //query  shared ({caller}) 
+    public query func getAccountsByPrincipal(owner : Principal) : async [Types.Account] {
+        //query  shared ({caller})
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         Debug.print("Principal que llama desde data: " # Principal.toText(owner));
 
-        let userAccounts = Array.filter<Types.Account>(accounts, func (account) { account.owner == owner });
+        let userAccounts = Array.filter<Types.Account>(accounts, func(account) { account.owner == owner });
 
         return userAccounts;
 
     };
 
-
-  
-    public shared func delAccount(simpleaccountnumber: Text): async Types.GetProfileResult {
+    public shared func delAccount(simpleaccountnumber : Text) : async Types.GetProfileResult {
         // if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         var accountFound = false;
-        var updatedAccounts: [Types.Account] = [];
+        var updatedAccounts : [Types.Account] = [];
 
         for (i in Iter.range(0, Array.size(accounts) - 1)) {
-            let account = accounts[i];  
+            let account = accounts[i];
             if (account.simpleaccountnumber == simpleaccountnumber) {
                 // if (account.owner != caller) {
                 //     return #err(#youAreNotTheOwnerOfThisAccount);
@@ -69,13 +66,13 @@ actor Data {
             return #ok(#accountSuccessfullyDeleted);
         } else {
             return #err(#noAccountFound);
-        }
+        };
     };
 
-    public query func getAccountByNumber(simpleaccountnumber: Text): async Types.GetProfileResult {
+    public query func getAccountByNumber(simpleaccountnumber : Text) : async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
-        let maybeAccount = Array.find<Types.Account>(accounts, func (account) { account.simpleaccountnumber == simpleaccountnumber });
+        let maybeAccount = Array.find<Types.Account>(accounts, func(account) { account.simpleaccountnumber == simpleaccountnumber });
 
         switch (maybeAccount) {
             case null {
@@ -90,23 +87,24 @@ actor Data {
         };
     };
 
-    public shared ({caller}) func updateAccount(simpleaccountnumber: Text, updatedAccount: Types.Account): async Types.GetProfileResult {
+
+
+    public shared ({ caller }) func updateAccount(simpleaccountnumber : Text, updatedAccount : Types.Account) : async Types.GetProfileResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         var accountFound = false;
-        var updatedAccounts: [Types.Account] = [];
-
+        var updatedAccounts : [Types.Account] = [];
 
         for (i in Iter.range(0, Array.size(accounts) - 1)) {
             let account = accounts[i];
             if (account.simpleaccountnumber == simpleaccountnumber) {
                 // if (account.owner != caller) {
-                //     return #err(#youAreNotTheOwnerOfThisAccount); 
+                //     return #err(#youAreNotTheOwnerOfThisAccount);
                 // };
 
                 let updatedAccountWithOldSimpleAccountNumber = {
                     namebankaccount = updatedAccount.namebankaccount;
-                    simpleaccountnumber = account.simpleaccountnumber; 
+                    simpleaccountnumber = account.simpleaccountnumber;
                     longaccountnumber = updatedAccount.longaccountnumber;
                     depositcurrency = updatedAccount.depositcurrency;
                     owner = caller;
@@ -123,24 +121,22 @@ actor Data {
             return #ok(#accountSuccessfullyUpdated);
         } else {
             return #err(#noAccountFound);
-        }
+        };
     };
 
-//Registro de Operaciones
+    //Registro de Operaciones
 
-    stable var orders: [Types.Order] = [];
+    //stable var orders: [Types.Order] = [];
 
-    private func internalAddOrder(newOrder: Types.Order): async Types.GetOrderResult {
+    private func internalAddOrder(newOrder : Types.Order) : async Types.GetOrderResult {
         orders := Array.append(orders, [newOrder]);
         return #ok(#orderSuccessfullyAdded);
     };
 
-    public func registerPaymentOrder(newOrder: Types.Order): async Types.GetOrderResult {
+    public shared func registerPaymentOrder(newOrder : Types.Order) : async Types.GetOrderResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
         return await internalAddOrder(newOrder);
 
     }
 
-    
-
-}
+};

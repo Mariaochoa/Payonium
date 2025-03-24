@@ -23,7 +23,8 @@ module Types {
         countryresidence: Text;
         owner: Principal;
         role: Text;  
-        principal: Text;      
+        principal: Text;  
+        //status: Bool;    
     };
 
     public type Account = {
@@ -80,9 +81,12 @@ type GetOrderResultOk = {
     };
 
     type GetOrderResultErr = { 
+        #userNotAuthenticated;
         #invalidOrder;
         #noOrderFound;
         #youAreNotTheOwnerOfThisOrder;
+
+        #userDoesNotActiveOrNotExist;
     };
 
     public type GetOrderResult = Result.Result<GetOrderResultOk, GetOrderResultErr>;
