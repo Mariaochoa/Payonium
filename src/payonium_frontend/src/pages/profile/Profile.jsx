@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-
 import { AuthContext } from '../../context/AuthContext';
 import { createActor } from 'declarations/payonium_backend';
 import styles from './Profile.module.css';
@@ -96,7 +95,7 @@ function Profile() {
     };
     try {
       console.log(newProfile);
-      const result = await backend.registerUser(newProfile);
+      const result = await backend.registerUserAdd(newProfile);
       if (result) {
         alert("usuario registrado exitosamente");
 

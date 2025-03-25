@@ -70,6 +70,7 @@ module Types {
         description: Text;
         dni: Text;
         email: Text;
+        owner: Principal;
     };
 
 type GetOrderResultOk = {
@@ -82,6 +83,7 @@ type GetOrderResultOk = {
 
     type GetOrderResultErr = { 
         #userNotAuthenticated;
+        #userDoesNotExist;
         #invalidOrder;
         #noOrderFound;
         #youAreNotTheOwnerOfThisOrder;

@@ -133,10 +133,32 @@ actor Data {
         return #ok(#orderSuccessfullyAdded);
     };
 
-    public shared func registerPaymentOrder(newOrder : Types.Order) : async Types.GetOrderResult {
+    public shared func addOrder(newOrder : Types.Order) : async Types.GetOrderResult {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
         return await internalAddOrder(newOrder);
 
-    }
+    };
+
+    public query func getAllOrders(): async [Types.Order] {
+        return orders;
+    };
+
+    public query func getOrderByPrincipal(owner : Principal) : async [Types.Order] {
+        //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+        Debug.print("Principal que llama desde data: " # Principal.toText(owner));
+        let userOrders = Array.filter<Types.Order>(orders, func(order) { order.owner == owner });
+        return userOrders;
+
+    };
+
+
+    public query func getOrdersByDni(dni: Text) : async [Types.Order] {
+        let userOrders = Array.filter<Types.Order>(orders, func(order) { order.dni == dni });
+        return userOrders;
+    };
+
+
+
+
 
 };

@@ -102,7 +102,7 @@ actor {
   };
 
   public shared (msg) func getMyAccounts(userDni : Text) : async Types.GetProfileResult {
-    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated); 
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
 
     Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
 
@@ -121,6 +121,17 @@ actor {
 
   };
 
+  public shared (msg) func getAllAccounts() : async Types.GetProfileResult {
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
+
+    Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+    let accountResult = await Data.getAllAccounts();
+
+    // Aquí orderResult es directamente un array de órdenes
+    return #ok(#accounts(accountResult));
+  };
+
   //Funciones para agregar ordenes
 
   public shared ({ caller }) func isUserActive(principal : Text) : async Bool {
@@ -128,27 +139,88 @@ actor {
 
     switch (maybeProfile) {
       case (null) {
-      Debug.print("Perfil no encontrado para el usuario: " # principal);
-      return false;
+        Debug.print("Perfil no encontrado para el usuario: " # principal);
+        return false;
       };
-      case (?profile){
-        return true;    // profile.status;
+      case (?profile) {
+        return true; // profile.status;
       };
     };
   };
 
-  public shared ({caller}) func registerOrder(newOrder: Types.Order) : async Types.GetOrderResult {
-    if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated); 
+  public shared ({ caller }) func registerOrder(newOrder : Types.Order) : async Types.GetOrderResult {
+    if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
     let isActive = await isUserActive(Principal.toText(caller));
-    if (isActive){
+    if (isActive) {
       Debug.print("El perfil está activo. Registrando la orden de pago...");
       // PENDIENTE await Data.registerPaymentOrder(newOrder);
-      return #ok(#orderSuccessfullyAdded)
+      return #ok(#orderSuccessfullyAdded);
     } else {
       Debug.print("El perfil no está activo.");
       return #err(#userDoesNotActiveOrNotExist);
-    }
-  }
+    };
+  };
+
+  // public shared (msg) func getAllOrders2() : async Types.GetOrderResult {
+  //   if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
+
+  //   Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+  //   let orderResult = await Data.getAllOrders();
+
+  //   switch (orderResult) {
+  //       case (#ok(result)) {
+  //           // Accede a la lista de órdenes desde result.orders
+  //           let orderList = result.orders;
+  //           return #ok(#orders(orderList));
+  //       };
+  //       case (#err(e)) {
+  //           // Si hubo un error, devuelve el error correspondiente
+  //           return #err(e);
+  //       };
+
+  //   };
+  // };
+
+  public shared (msg) func getAllOrders() : async Types.GetOrderResult {
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
+
+    Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+    let orderResult = await Data.getAllOrders();
+
+    // Aquí orderResult es directamente un array de órdenes
+    return #ok(#orders(orderResult));
+  };
+
+  public shared (msg) func getMyOrder(userDni : Text) : async Types.GetOrderResult {
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
+
+    Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+    let maybeProfile = Map.get(profiles, thash, userDni);
+
+    switch (maybeProfile) {
+      case (null) {
+        return #err(#userDoesNotExist);
+      };
+      case (?profile) {
+
+        let userOrder = await Data.getOrderByPrincipal(profile.owner);
+        return #ok(#orders(userOrder));
+      };
+    };
+
+  };
+
+  public shared (msg) func getOrdersByDni(dni : Text) : async Types.GetOrderResult {
+    if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
+
+    Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
+
+    let userOrders = await Data.getOrdersByDni(dni);
+    return #ok(#orders(userOrders));
+  };
 
 };
