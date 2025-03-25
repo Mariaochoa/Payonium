@@ -24,7 +24,7 @@ const Navbar = () => {
                 {isAuthenticated && (
                     <>
                         <li><Link to='profile'>Profile</Link></li>
-                        <li><Link to='operation'>Operations</Link></li>
+                        <li><Link to='transaction'>Transaction</Link></li>
                     </>
                 )}
                 <li><Link to='about'>About</Link></li>
