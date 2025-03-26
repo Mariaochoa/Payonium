@@ -20,9 +20,7 @@ actor Data {
         //if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         // Verifica que el propietario de la cuenta sea el que está llamando
-        // if (newAccount.owner != caller) {
-        //     return #err(#youAreNotTheOwnerOfThisAccount);
-        // };
+        // if (newAccount.owner != caller) { return #err(#youAreNotTheOwnerOfThisAccount); };
 
         return await internalAddAccount(newAccount);
     };
@@ -138,6 +136,7 @@ actor Data {
         return await internalAddOrder(newOrder);
 
     };
+
 
     public query func getAllOrders(): async [Types.Order] {
         return orders;

@@ -27,6 +27,7 @@ function Transaction() {
     dni: '',
     email: '',
   });
+  const [userStatus, setUserStatus] = useState('');
 
 
 
@@ -48,18 +49,22 @@ function Transaction() {
     try {
       const result = await backend.isUserActive(userPrincipalText);
       if (result) {
-        alert(result ? "El usuario está activo." : "El usuario no está activo.");
+        //alert(result ? "El usuario está activo." : "El usuario no está activo.");
+        setUserStatus("El usuario esta activo");
       } else {
-        alert("No se pudo verificar el estado del usuario.");
+        //alert("No se pudo verificar el estado del usuario.");
+        setUserStatus("El usuario no esta activo")
       }
     } catch (err) {
       console.log(err);
-      alert("Error al verificar el estado del usuario.");
+      //alert("Error al verificar el estado del usuario.");
+      setUserStatus("Error al verificar el estado del usuario");
     }
   }
 
   // Función para registrar una orden
   async function handleRegisterOrder() {
+    event.preventDefault();
     if (!isAuthenticated) {
       alert("Debe estar logueado para registrar una orden.");
       return;
@@ -72,11 +77,12 @@ function Transaction() {
       description: orderData.description,
       dni: orderData.dni,
       email: orderData.email,
+      owner: identity.getPrincipal(),
     };
 
     try {
       const result = await backend.registerOrder(newOrder);
-      if (result.ok && result.ok.orderSuccessfullyAdded) {
+      if (result) {
         setOrderResult("Orden registrada exitosamente.");
       } else {
         setOrderResult("Error al registrar la orden: " + result.err);
@@ -137,6 +143,7 @@ function Transaction() {
 
       <div className={styles.isUserActiveWrapper}>
         <button onClick={isUserActive}>Check if User is Active</button>
+        {userStatus && <div id="principal" className={styles.userStatus}>{userStatus}</div>}
       </div>
 
 
@@ -150,7 +157,7 @@ function Transaction() {
           <input type="text" placeholder="DNI" name="dni" value={orderData.dni} onChange={handleOrderChange} />
           <input type="email" placeholder="Email" name="email" value={orderData.email} onChange={handleOrderChange} />
           <div className={styles.formFooter}>
-            <button type="submit">Confirm Order</button>
+            <button type="submit">Register Order</button>
           </div>
         </form>
 

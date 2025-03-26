@@ -152,15 +152,20 @@ actor {
     if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
     let isActive = await isUserActive(Principal.toText(caller));
-    if (isActive) {
-      Debug.print("El perfil está activo. Registrando la orden de pago...");
-      // PENDIENTE await Data.registerPaymentOrder(newOrder);
-      return #ok(#orderSuccessfullyAdded);
-    } else {
+    if (isActive == false) {
       Debug.print("El perfil no está activo.");
       return #err(#userDoesNotActiveOrNotExist);
+    } else {
+    
+      Debug.print("El perfil está activo. Registrando la orden de pago...");
+      // PENDIENTE await Data.registerPaymentOrder(newOrder);
+      //await Data.addOrder(newOrder);
+      //return #ok(#orderSuccessfullyAdded);
+      return await Data.addOrder(newOrder);
     };
+    
   };
+
 
   // public shared (msg) func getAllOrders2() : async Types.GetOrderResult {
   //   if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
