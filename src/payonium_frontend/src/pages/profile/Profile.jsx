@@ -20,6 +20,7 @@ function Profile() {
   const [principal, setPrincipal] = useState('');
   const [profiles, setProfiles] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
+  const [userAccount, setUserAccount] = useState(null);
 
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
@@ -108,7 +109,37 @@ function Profile() {
 
   }
 
+  //Manejando cuentas
 
+  async function getMyAccount() {
+    if (!isAuthenticated) {
+      alert("Debe estar logueado para obtener el perfil.");
+      return;
+    }
+
+    const userPrincipalText = identity.getPrincipal().toText(); // Obtener el Principal en formato texto
+
+    try {
+      // Llamar al backend para obtener el perfil asociado a ese Principal (usando el texto del Principal)
+      console.log("respuesta a analizar")
+      const result = await backend.getMyAccounts(userPrincipalText); // Llamar a la nueva función en el backend
+      console.log(result);
+
+      if (result.ok && result.ok.accounts && result.ok.accounts.length > 0) {
+        console.log('Cuenta recibida:', result.ok.account);
+        setUserAccount(result.ok.accounts);  // Guardamos el perfil del usuario logueado
+        setError(null);  // Limpiar errores si la solicitud es exitosa
+      } else {
+        alert("No se encontró la cuenta del usuario.");
+
+        // if (!userAccount || !userAccount.name) {
+        //   return <div>No se pudo cargar la cuenta correctamente.</div>;
+        // }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
 
   return (
@@ -166,7 +197,7 @@ function Profile() {
         <div>
 
           <div className={styles.profileSection}>
-            <button onClick={handleGetUserProfile}>Obtener mi perfil</button>
+            <button onClick={handleGetUserProfile}>Get my profile</button>
           </div>
 
           {error && <div className={styles.error}>{error}</div>}  {/* Mostrar error si ocurre */}
@@ -184,9 +215,32 @@ function Profile() {
               <p><strong>Rol:</strong> {userProfile.role}</p>
             </div>
           ) : (
-            <div className={styles.noProfile}>No se ha cargado el perfil aún.</div>
+            <div className={styles.noProfile}>The profile has not been loaded yet</div>
           )}
 
+        </div>
+
+        <div>
+          <button onClick={getMyAccount}>Get my accounts</button>
+
+          {error && <div className={styles.error}>{error}</div>}
+
+          {userAccount ? (
+            <div className={styles.profileDisplay}>
+              <h3>Cuentas del Usuario</h3>
+              {userAccount.map((account, index) => (
+                <div key={index}>
+                  <p><strong>Cuenta {index + 1}</strong></p>
+                  <p><strong>Cuenta larga:</strong> {account.longaccountnumber}</p>
+                  <p><strong>Nombre de la cuenta:</strong> {account.namebankaccount}</p>
+                  <p><strong>Número de cuenta simple:</strong> {account.simpleaccountnumber}</p>
+                  <p><strong>Moneda de depósito:</strong> {account.depositcurrency}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.noProfile}>The account has not been loaded yet</div>
+          )}
         </div>
       </div>
     </div>
