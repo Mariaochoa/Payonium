@@ -28,6 +28,7 @@ function Transaction() {
     email: '',
   });
   const [userStatus, setUserStatus] = useState('');
+  const [orders, setOrders] = useState([]);
 
 
 
@@ -105,12 +106,14 @@ function Transaction() {
   // Función para obtener todas las órdenes
   async function handleGetAllOrders() {
     try {
-      const orders = await backend.getAllOrders();
+      const response = await backend.getAllOrders();
+      const orders = response.ok.orders;
       console.log("Todas las órdenes:", orders);
-      setOrderResult("Órdenes obtenidas exitosamente.");
+      setOrders(orders);
+      //setOrderResult("Órdenes obtenidas exitosamente.");
     } catch (err) {
       console.log(err);
-      setOrderResult("Error al obtener las órdenes.");
+      //setOrderResult("Error al obtener las órdenes.");
     }
   }
 
@@ -166,6 +169,30 @@ function Transaction() {
 
       <div className={styles.orderQueryWrapper}>
         <button onClick={handleGetAllOrders}>Get All Orders</button>
+        <div className={styles.orderSection}>
+
+          {orders.length > 0 ? (
+            <ul>
+              <h3>All Orders</h3>
+              {orders.map((order, index) => (
+                <li key={index}>
+                  <div className="order-item">
+                    <p><strong>DNI:</strong> {order.dni}</p>
+                    <p><strong>Description:</strong> {order.description}</p>
+                    <p><strong>Email:</strong> {order.email}</p>
+                    <p><strong>Amount:</strong> {Number (order.amount)}</p>
+                    <p><strong>Currency:</strong> {order.currency}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No orders available.</p>
+          )}
+        </div>
+
+
+
         <button onClick={handleGetOrdersByDni}>Get Orders by DNI</button>
       </div>
 

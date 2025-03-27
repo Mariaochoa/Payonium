@@ -7,3 +7,69 @@
     flex-direction: column;    /* Asegura que los elementos se apilen verticalmente */
   }
   
+
+ 
+/* 
+  .orderSection li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .orderSection li p {
+    margin: 5px 0;
+  }
+   */
+
+
+
+/* 
+
+
+
+  .orderQueryWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+
+
+
+.orderSection {
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto; 
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+ */
+
+
+
+ .orderSection li p {
+  margin: 8px 0; 
+  font-size: 18px; 
+  text-align: left;  
+}
+
+.orderSection li {
+  display: flex;
+  flex-direction: column;  
+  align-items: flex-start; 
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.orderSection ul {
+  list-style-type: none;  
+  padding-left: 0; 
+}
