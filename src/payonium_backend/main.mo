@@ -5,6 +5,7 @@ import Debug "mo:base/Debug";
 import Types "./types";
 import Map "mo:map/Map";
 import { thash } "mo:map/Map";
+import { phash } "mo:map/Map";
 import Iter "mo:base/Iter";
 import Data "canister:data";
 
@@ -101,25 +102,28 @@ actor {
     return await Data.addAccount(newAccount);
   };
 
-  public shared (msg) func getMyAccounts(userDni : Text) : async Types.GetProfileResult {
+  public shared (msg) func getMyAccounts(principal: Text) : async Types.GetProfileResult {
     if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
 
     Debug.print("Principal que llama desde main: " # Principal.toText(msg.caller));
 
-    let maybeProfile = Map.get(profiles, thash, userDni);
+    let maybeProfile = Map.get(profiles, thash, principal);
 
     switch (maybeProfile) {
       case (null) {
         return #err(#userDoesNotExist);
       };
       case (?profile) {
+        let principalValue = Principal.fromText(principal);
 
-        let userAccount = await Data.getAccountsByPrincipal(profile.owner);
+        let userAccount = await Data.getAccountsByPrincipal(principalValue);
         return #ok(#accounts(userAccount));
       };
     };
 
+
   };
+
 
   public shared (msg) func getAllAccounts() : async Types.GetProfileResult {
     if (Principal.isAnonymous(msg.caller)) return #err(#userNotAuthenticated);
@@ -158,7 +162,7 @@ actor {
     } else {
     
       Debug.print("El perfil está activo. Registrando la orden de pago...");
-      // PENDIENTE await Data.registerPaymentOrder(newOrder);
+      //await Data.registerPaymentOrder(newOrder);
       //await Data.addOrder(newOrder);
       //return #ok(#orderSuccessfullyAdded);
       return await Data.addOrder(newOrder);
