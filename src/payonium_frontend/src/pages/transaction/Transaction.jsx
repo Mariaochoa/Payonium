@@ -19,6 +19,7 @@ function Transaction() {
 
   const [principal, setPrincipal] = useState('');
   const [orderResult, setOrderResult] = useState(null);
+  const [orderDniResult, setOrderDniResult] = useState(null);
   const [orderData, setOrderData] = useState({
     amount: 0,
     currency: '',
@@ -66,8 +67,8 @@ function Transaction() {
   }
 
   // Función para registrar una orden
-  async function handleRegisterOrder() {
-    event.preventDefault();
+  async function handleRegisterOrder(e) {
+    e.preventDefault();
     if (!isAuthenticated) {
       alert("Debe estar logueado para registrar una orden.");
       return;
@@ -156,7 +157,7 @@ function Transaction() {
 
       <div className={styles.orderSection}>
         <h3>Register a New Order</h3>
-        <form onSubmit={(e) => { e.preventDefault(); handleRegisterOrder(); }}>
+        <form onSubmit={handleRegisterOrder}> 
           <input type="number" placeholder="Amount" name="amount" value={orderData.amount} onChange={handleOrderChange} />
           <input type="text" placeholder="Currency" name="currency" value={orderData.currency} onChange={handleOrderChange} />
           <input type="text" placeholder="Account" name="account" value={orderData.account} onChange={handleOrderChange} />
@@ -203,7 +204,7 @@ function Transaction() {
             <button type="submit">Get Orders by DNI</button>
           </form>
           {/* Mostramos el resultado de la consulta, ya sea un mensaje de éxito o error */}
-          {orderResult && <div className={styles.orderResult}>{orderResult}</div>}
+          {orderDniResult && <div className={styles.orderResult}>{orderDniResult}</div>}
 
           <div className={styles.orderSection}>
             {ordersDni.length > 0 ? (
@@ -214,7 +215,7 @@ function Transaction() {
                       <p><strong>DNI:</strong> {order.dni}</p>
                       <p><strong>Description:</strong> {order.description}</p>
                       <p><strong>Email:</strong> {order.email}</p>
-                      <p><strong>Amount:</strong> {order.amount}</p>
+                      <p><strong>Amount:</strong> {Number(order.amount)}</p>
                       <p><strong>Currency:</strong> {order.currency}</p>
                     </div>
                   </li>
