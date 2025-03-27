@@ -29,6 +29,8 @@ function Transaction() {
   });
   const [userStatus, setUserStatus] = useState('');
   const [orders, setOrders] = useState([]);
+  const [ordersDni, setOrdersDni] = useState([]);
+  const [dniSearch, setDniSearch] = useState('');
 
 
 
@@ -119,18 +121,20 @@ function Transaction() {
 
   // Función para obtener las órdenes por DNI
   async function handleGetOrdersByDni() {
-    if (!orderData.dni) {
+    if (!dniSearch) {
       alert("Por favor ingrese un DNI para consultar las órdenes.");
       return;
     }
 
     try {
-      const orders = await backend.getOrdersByDni(orderData.dni);
+      const response = await backend.getOrdersByDni(dniSearch);
+      const orders = response.ok.orders;
       console.log("Órdenes por DNI:", orders);
-      setOrderResult("Órdenes obtenidas exitosamente.");
+      setOrdersDni(orders);
+      //setOrderResult("Órdenes obtenidas exitosamente.");
     } catch (err) {
       console.log(err);
-      setOrderResult("Error al obtener las órdenes por DNI.");
+      //setOrderResult("Error al obtener las órdenes por DNI.");
     }
   }
 
@@ -180,7 +184,7 @@ function Transaction() {
                     <p><strong>DNI:</strong> {order.dni}</p>
                     <p><strong>Description:</strong> {order.description}</p>
                     <p><strong>Email:</strong> {order.email}</p>
-                    <p><strong>Amount:</strong> {Number (order.amount)}</p>
+                    <p><strong>Amount:</strong> {Number(order.amount)}</p>
                     <p><strong>Currency:</strong> {order.currency}</p>
                   </div>
                 </li>
@@ -191,9 +195,38 @@ function Transaction() {
           )}
         </div>
 
+        <div className={styles.orderQueryWrapper}>
+
+          <form onSubmit={(e) => { e.preventDefault(); handleGetOrdersByDni(); }}>
+            <input type="text" placeholder="Ingrese dni a consultar" value={dniSearch} onChange={(e) => setDniSearch(e.target.value)} />
+
+            <button type="submit">Get Orders by DNI</button>
+          </form>
+          {/* Mostramos el resultado de la consulta, ya sea un mensaje de éxito o error */}
+          {orderResult && <div className={styles.orderResult}>{orderResult}</div>}
+
+          <div className={styles.orderSection}>
+            {ordersDni.length > 0 ? (
+              <ul>
+                {ordersDni.map((order, index) => (
+                  <li key={index}>
+                    <div className="order-item">
+                      <p><strong>DNI:</strong> {order.dni}</p>
+                      <p><strong>Description:</strong> {order.description}</p>
+                      <p><strong>Email:</strong> {order.email}</p>
+                      <p><strong>Amount:</strong> {order.amount}</p>
+                      <p><strong>Currency:</strong> {order.currency}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No orders found for the given DNI.</p>
+            )}
+          </div>
+        </div>
 
 
-        <button onClick={handleGetOrdersByDni}>Get Orders by DNI</button>
       </div>
 
     </div>
