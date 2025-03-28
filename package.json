@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "@dfinity/auth-client": "^2.3.0",
+    "@ramp-network/ramp-instant-sdk": "^4.0.8",
     "react-router-dom": "^6.30.0"
   }
 }

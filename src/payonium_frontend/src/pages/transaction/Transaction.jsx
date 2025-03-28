@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { createActor } from 'declarations/payonium_backend';
 import styles from './Transaction.module.css';
+import RampWidget from '../../services/RampWidget';
 
 function Transaction() {
 
@@ -229,6 +230,9 @@ function Transaction() {
 
 
       </div>
+
+      <h2>Aqui puedes hacer tu cargo de efectivo</h2>
+      <RampWidget /> 
 
     </div>
   );
