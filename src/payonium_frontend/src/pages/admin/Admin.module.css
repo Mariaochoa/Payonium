@@ -1,0 +1,18 @@
+.adminLayout {
+  display: flex;
+}
+
+.adminContent {
+  margin-left: 200px; 
+  padding: 20px;
+  flex-grow: 1;  
+
+  
+}
+
+
+.adminContent h2 {
+  margin-top: 100px; 
+  text-align: left;  
+  margin-left: 350px; 
+}

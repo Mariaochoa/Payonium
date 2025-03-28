@@ -1,0 +1,109 @@
+
+  
+  /* Centrando el contenido de la sección */
+  .profileSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Estilos para los botones de acción */
+  button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #201a5e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #404a81;
+  }
+  
+/* Centrar el div que contiene el botón */
+.getProfilesWrapper {
+  display: flex;
+  justify-content: center; 
+  width: 100%;
+}
+
+/* Centrar el contenedor de la etiqueta y el formulario */
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  width: 100%;
+  text-align: center; 
+}
+  
+  /* Estilos del formulario */
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+  }
+  
+  /* Estilo para las columnas del formulario */
+  form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Centrar el botón al final del formulario */
+ .formFooter {
+  display: flex;
+  justify-content: center;
+  grid-column: span 2; 
+  width: 100%;
+}
+
+/* Estilo para el contenido del perfil */
+.profileDisplay {
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto; /* Centrado horizontal */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Estilo para el mensaje si no hay perfil */
+.noProfile {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.profiles {
+  display: block; 
+  width: 100%;
+  max-width: 800px; 
+  margin: 20px auto; 
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  text-align: left; 
+}
+
+
+
+.profiles li {
+  margin-bottom: 15px; /* Espaciado entre los elementos de la lista */
+  display: block; /* Asegura que cada <li> se muestra como un bloque */
+}
+
+

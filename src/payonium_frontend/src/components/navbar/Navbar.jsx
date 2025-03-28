@@ -25,6 +25,7 @@ const Navbar = () => {
                     <>
                         <li><Link to='profile'>Profile</Link></li>
                         <li><Link to='transaction'>Transaction</Link></li>
+                        <li><Link to='admin'>Admin</Link></li>
                     </>
                 )}
                 <li><Link to='about'>About</Link></li>
