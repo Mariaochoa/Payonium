@@ -151,27 +151,7 @@ function Profile() {
         <section id="principal">{principal}</section>
       </div>
 
-      <div className={styles.getProfilesWrapper}>
-        <button onClick={getProfiles}>Get User Profiles</button>
-      </div>
 
-      <div className={styles.profiles}>
-        <ul>
-          {profiles.map((profile, index) => (
-            <li key={index}>
-              <strong>{profile.name} {profile.lastname}</strong><br />
-              <span>Email: {profile.email}</span><br />
-              <span>DNI: {profile.dni}</span><br />
-              <span>Country of Origin: {profile.countryorigindocument}</span>
-              <span>Phone: {profile.phone}</span><br />
-              <span>Password: {profile.password}</span><br />
-              <span>Country of Residence: {profile.countryresidence}</span><br />
-              <span>Owner: {JSON.stringify(profile.owner)}</span><br />
-              <span>Role: {profile.role}</span><br />
-            </li>
-          ))}
-        </ul>
-      </div>
 
       <div className={styles.formWrapper}>
 
