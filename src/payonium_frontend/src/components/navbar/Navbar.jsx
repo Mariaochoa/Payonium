@@ -2,14 +2,17 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
     const { isAuthenticated, login, logout } = useContext(AuthContext)
+    const navigate = useNavigate();
 
     const handleLogout = (e) => {
         e.preventDefault();
         logout();
+        navigate('/');
         
     }
     return (
