@@ -34,7 +34,14 @@ function Transaction() {
   const [ordersDni, setOrdersDni] = useState([]);
   const [dniSearch, setDniSearch] = useState('');
 
-
+  const [depositData, setDepositData] = useState({
+    amount: 0,
+    operationNumber: '',
+    date: '',
+    time: '',
+    bank: '',
+    city: '',
+  });
 
   // Función para obtener el principal del usuario
   async function handleWhoAmI() {
@@ -140,8 +147,59 @@ function Transaction() {
     }
   }
 
+  //Envio de datos para los depositos directos al Banco
+  const handleDepositChange = (e) => {
+    const { name, value } = e.target;
+    setDepositData({
+      ...depositData,
+      [name]: name === 'amount' ? Number(value) : value,
+    });
+  };
 
+  async function handleRegisterDeposit(e) {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      alert("Debe estar logueado para registrar una transacción.");
+      return;
+    }
 
+    const newDeposit = {
+      amount: depositData.amount,
+      operationNumber: depositData.operationNumber,
+      date: depositData.date,
+      time: depositData.time,
+      bank: depositData.bank,
+      city: depositData.city,
+      owner: identity.getPrincipal(),
+    };
+
+    try {
+      const result = await backend.registerDeposit(newDeposit);
+      if (result) {
+        alert("Depósito registrado exitosamente.");
+      } else {
+        alert("Error al registrar el depósito.");
+      }
+    } catch (err) {
+      console.log(err);
+      alert("Error al registrar el depósito.");
+    }
+  }
+
+  //Funcion a cambiar posteriormente para actualizar automaticamente
+  async function handleUpdateStatus(orderId) {
+    try {
+      const response = await backend.getTransactionStatus(orderId);
+      const updatedStatus = response.status;
+
+      setOrders(orders.map(order =>
+        order.id === orderId ? { ...order, status: updatedStatus } : order
+      ));
+    } catch (err) {
+      console.log("Error al actualizar el estado de la transacción:", err);
+      alert("Error al actualizar el estado.");
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -158,7 +216,7 @@ function Transaction() {
 
       <div className={styles.orderSection}>
         <h3>Register a New Order</h3>
-        <form onSubmit={handleRegisterOrder}> 
+        <form onSubmit={handleRegisterOrder}>
           <input type="number" placeholder="Amount" name="amount" value={orderData.amount} onChange={handleOrderChange} />
           <input type="text" placeholder="Currency" name="currency" value={orderData.currency} onChange={handleOrderChange} />
           <input type="text" placeholder="Account" name="account" value={orderData.account} onChange={handleOrderChange} />
@@ -211,13 +269,27 @@ function Transaction() {
             {ordersDni.length > 0 ? (
               <ul>
                 {ordersDni.map((order, index) => (
-                  <li key={index}>
+                  <li key={index} className={styles.orderItem}>
                     <div className="order-item">
                       <p><strong>DNI:</strong> {order.dni}</p>
                       <p><strong>Description:</strong> {order.description}</p>
                       <p><strong>Email:</strong> {order.email}</p>
                       <p><strong>Amount:</strong> {Number(order.amount)}</p>
                       <p><strong>Currency:</strong> {order.currency}</p>
+                    </div>
+
+                    {/* Aquí agregamos el estado de la transacción de forma independiente */}
+                    <div className={styles.statusWrapper}>
+                      <div className={styles.statusSection}>
+                        <p
+                          className={
+                            order.status === "pendiente" ? styles.statusPending :
+                              order.status === "procesándose" ? styles.statusProcessing :
+                                order.status === "pago-recibido" ? styles.statusCompleted : ""}>
+                          <strong>Status:</strong> {order.status}
+                        </p>
+                        <button onClick={() => handleUpdateStatus(order.id)} className={styles.updateButton}>Actualizar</button>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -231,8 +303,31 @@ function Transaction() {
 
       </div>
 
-      <h2>Aqui puedes hacer tu cargo de efectivo</h2>
-      <RampWidget /> 
+      <div>
+
+        <h2>Here you can make your cash load</h2>
+        <RampWidget />
+
+      </div>
+
+      <div>
+        <div className={styles.depositSection}>
+          <h3>Register a deposit</h3>
+          <form onSubmit={handleRegisterDeposit}>
+            <input type="number" placeholder="Monto del Depósito" name="amount" value={depositData.amount} onChange={handleDepositChange} />
+            <input type="text" placeholder="Número de Operación" name="operationNumber" value={depositData.operationNumber} onChange={handleDepositChange} />
+            <input type="date" placeholder="Fecha" name="date" value={depositData.date} onChange={handleDepositChange} />
+            <input type="time" placeholder="Hora" name="time" value={depositData.time} onChange={handleDepositChange} />
+            <input type="text" placeholder="Banco" name="bank" value={depositData.bank} onChange={handleDepositChange} />
+            <input type="text" placeholder="Ciudad" name="city" value={depositData.city} onChange={handleDepositChange} />
+            <div className={styles.formFooter}>
+              <button type="submit">Confirm</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
 
     </div>
   );
