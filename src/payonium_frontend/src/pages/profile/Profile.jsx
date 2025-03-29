@@ -1,3 +1,4 @@
+//Gustavo Fuentes Gonzales
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { createActor } from 'declarations/payonium_backend';
@@ -18,7 +19,6 @@ function Profile() {
 
 
   const [principal, setPrincipal] = useState('');
-  const [profiles, setProfiles] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
   const [userAccount, setUserAccount] = useState(null);
 
@@ -32,6 +32,7 @@ function Profile() {
   const [countryresidence, setCountryresidence] = useState('');
 
   const [error, setError] = useState(null);
+  const [userStatus, setUserStatus] = useState('');
 
   async function handleWhoAmI() {
     const principal = await backend.whoAmI();
@@ -45,18 +46,17 @@ function Profile() {
       return;
     }
 
-    const userPrincipalText = identity.getPrincipal().toText(); // Obtener el Principal en formato texto
+    const userPrincipalText = identity.getPrincipal().toText(); 
 
     try {
-      // Llamar al backend para obtener el perfil asociado a ese Principal (usando el texto del Principal)
       console.log("respuesta a analizar")
-      const result = await backend.getMyProfile(userPrincipalText); // Llamar a la nueva función en el backend
+      const result = await backend.getMyProfile(userPrincipalText); 
       console.log(result);
 
       if (result.ok && result.ok.profile) {
         console.log('Perfil recibido:', result.ok.profile);
-        setUserProfile(result.ok.profile);  // Guardamos el perfil del usuario logueado
-        setError(null);  // Limpiar errores si la solicitud es exitosa
+        setUserProfile(result.ok.profile); 
+        setError(null); 
       } else {
         alert("No se encontró el perfil del usuario.");
       }
@@ -64,22 +64,6 @@ function Profile() {
       console.log(err);
     }
   }
-
-  async function getProfiles() {
-
-    try {
-      const result = await backend.getProfiles();
-      console.log(result);
-      if (result.ok.profiles) {
-        setProfiles(result.ok.profiles);
-      } else {
-        alert("Error al obtener los perfiles");
-      }
-
-    } catch (err) {
-      console.log(err);
-    };
-  };
 
   async function registerUser(event) {
     event.preventDefault();
@@ -142,6 +126,31 @@ function Profile() {
   }
 
 
+    // Función para verificar si el usuario está activo
+    async function isUserActive() {
+      if (!isAuthenticated) {
+        alert("Debe estar logueado para verificar el estado del usuario.");
+        return;
+      }
+  
+      const userPrincipalText = identity.getPrincipal().toText();
+  
+      try {
+        const result = await backend.isUserActive(userPrincipalText);
+        if (result) {
+          //alert(result ? "El usuario está activo." : "El usuario no está activo.");
+          setUserStatus("El usuario esta activo");
+        } else {
+          //alert("No se pudo verificar el estado del usuario.");
+          setUserStatus("El usuario no esta activo")
+        }
+      } catch (err) {
+        console.log(err);
+        //alert("Error al verificar el estado del usuario.");
+        setUserStatus("Error al verificar el estado del usuario");
+      }
+    }
+
   return (
     <div className={styles.container}>
 
@@ -198,6 +207,11 @@ function Profile() {
             <div className={styles.noProfile}>The profile has not been loaded yet</div>
           )}
 
+        </div>
+
+        <div className={styles.isUserActiveWrapper}>
+          <button onClick={isUserActive}>Check if User is Active</button>
+          {userStatus && <div id="principal" className={styles.userStatus}>{userStatus}</div>}
         </div>
 
         <div>

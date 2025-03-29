@@ -62,3 +62,19 @@
   width: 100%; 
 }
 
+/* cancelado */
+
+
+
+.box {
+  border: 1px solid #ccc;  /* Borde del recuadro */
+  padding: 20px;
+  background-color: #f9f9f9;  /* Fondo del recuadro */
+  border-radius: 8px;         /* Bordes redondeados */
+  min-height: 40px;          /* Tamaño mínimo */
+  display: flex;
+  justify-content: center;
+}
+
+
+

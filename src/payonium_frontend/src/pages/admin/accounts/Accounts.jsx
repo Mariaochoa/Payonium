@@ -18,118 +18,30 @@ function Accounts() {
   });
 
 
-  const [principal, setPrincipal] = useState('');
-  const [profiles, setProfiles] = useState([]);
-  const [userProfile, setUserProfile] = useState(null);
+
   const [userAccount, setUserAccount] = useState(null);
-
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [dni, setDni] = useState('');
-  const [countryorigindocument, setCountryorigindocument] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [countryresidence, setCountryresidence] = useState('');
-
   const [error, setError] = useState(null);
 
-  async function handleWhoAmI() {
-    const principal = await backend.whoAmI();
-    console.log("prueba");
-    setPrincipal(principal.toString());
-  }
+  //Manejando cuentas - Cambiar por ver todas las cuentas y ver las cuentas de un usuario
 
-  async function handleGetUserProfile() {
+  async function getMyAccount() {    
     if (!isAuthenticated) {
       alert("Debe estar logueado para obtener el perfil.");
       return;
     }
 
-    const userPrincipalText = identity.getPrincipal().toText(); // Obtener el Principal en formato texto
+    const userPrincipalText = identity.getPrincipal().toText(); 
 
     try {
-      // Llamar al backend para obtener el perfil asociado a ese Principal (usando el texto del Principal)
+ 
       console.log("respuesta a analizar")
-      const result = await backend.getMyProfile(userPrincipalText); // Llamar a la nueva función en el backend
-      console.log(result);
-
-      if (result.ok && result.ok.profile) {
-        console.log('Perfil recibido:', result.ok.profile);
-        setUserProfile(result.ok.profile);  // Guardamos el perfil del usuario logueado
-        setError(null);  // Limpiar errores si la solicitud es exitosa
-      } else {
-        alert("No se encontró el perfil del usuario.");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function getProfiles() {
-
-    try {
-      const result = await backend.getProfiles();
-      console.log(result);
-      if (result.ok.profiles) {
-        setProfiles(result.ok.profiles);
-      } else {
-        alert("Error al obtener los perfiles");
-      }
-
-    } catch (err) {
-      console.log(err);
-    };
-  };
-
-  async function registerUser(event) {
-    event.preventDefault();
-    if (!isAuthenticated) {
-      alert("Debe estar logueado para registrar un usuario.");
-      return;
-    }
-
-    const newProfile = {
-      name, lastname, email, dni, countryorigindocument, phone, password, countryresidence,
-      owner: identity.getPrincipal(),
-      role: 'user',
-      principal: identity.getPrincipal().toText(),
-    };
-    try {
-      console.log(newProfile);
-      const result = await backend.registerUserAdd(newProfile);
-      if (result) {
-        alert("usuario registrado exitosamente");
-
-      } else {
-        alert("error en el registro: " + result.err)
-      };
-    } catch (err) {
-      console.log(err)
-    }
-
-  }
-
-  //Manejando cuentas
-
-  async function getMyAccount() {
-    if (!isAuthenticated) {
-      alert("Debe estar logueado para obtener el perfil.");
-      return;
-    }
-
-    const userPrincipalText = identity.getPrincipal().toText(); // Obtener el Principal en formato texto
-
-    try {
-      // Llamar al backend para obtener el perfil asociado a ese Principal (usando el texto del Principal)
-      console.log("respuesta a analizar")
-      const result = await backend.getMyAccounts(userPrincipalText); // Llamar a la nueva función en el backend
+      const result = await backend.getMyAccounts(userPrincipalText); 
       console.log(result);
 
       if (result.ok && result.ok.accounts && result.ok.accounts.length > 0) {
         console.log('Cuenta recibida:', result.ok.account);
-        setUserAccount(result.ok.accounts);  // Guardamos el perfil del usuario logueado
-        setError(null);  // Limpiar errores si la solicitud es exitosa
+        setUserAccount(result.ok.accounts); 
+        setError(null); 
       } else {
         alert("No se encontró la cuenta del usuario.");
 
@@ -146,17 +58,8 @@ function Accounts() {
   return (
     <div className={styles.container}>
 
-
-      <div className={styles.profileSection}>
-        <button onClick={handleWhoAmI}>Who Am I?</button>
-        <section id="principal">{principal}</section>
-      </div>
-
-      
+     
       <div className={styles.formWrapper}>
-
-        
-        {/* cambiar por Ver Todas las Cuentas */}
 
         <div>
           <button onClick={getMyAccount}>Get all accounts</button>

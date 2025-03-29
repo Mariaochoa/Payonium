@@ -18,10 +18,8 @@ function orders() {
       },
     });
   
-  
-    const [principal, setPrincipal] = useState('');
     const [orderResult, setOrderResult] = useState(null);
-    const [orderDniResult, setOrderDniResult] = useState(null);
+    //const [orderDniResult, setOrderDniResult] = useState(null);
     const [orderData, setOrderData] = useState({
       amount: 0,
       currency: '',
@@ -30,43 +28,10 @@ function orders() {
       dni: '',
       email: '',
     });
-    const [userStatus, setUserStatus] = useState('');
+
     const [orders, setOrders] = useState([]);
     const [ordersDni, setOrdersDni] = useState([]);
     const [dniSearch, setDniSearch] = useState('');
-  
-  
-  
-    // Función para obtener el principal del usuario
-    async function handleWhoAmI() {
-      const principal = await backend.whoAmI();
-      setPrincipal(principal.toString());
-    }
-  
-    // Función para verificar si el usuario está activo
-    async function isUserActive() {
-      if (!isAuthenticated) {
-        alert("Debe estar logueado para verificar el estado del usuario.");
-        return;
-      }
-  
-      const userPrincipalText = identity.getPrincipal().toText();
-  
-      try {
-        const result = await backend.isUserActive(userPrincipalText);
-        if (result) {
-          //alert(result ? "El usuario está activo." : "El usuario no está activo.");
-          setUserStatus("El usuario esta activo");
-        } else {
-          //alert("No se pudo verificar el estado del usuario.");
-          setUserStatus("El usuario no esta activo")
-        }
-      } catch (err) {
-        console.log(err);
-        //alert("Error al verificar el estado del usuario.");
-        setUserStatus("Error al verificar el estado del usuario");
-      }
-    }
   
     // Función para registrar una orden
     async function handleRegisterOrder(e) {
@@ -134,10 +99,10 @@ function orders() {
         const orders = response.ok.orders;
         console.log("Órdenes por DNI:", orders);
         setOrdersDni(orders);
-        //setOrderResult("Órdenes obtenidas exitosamente.");
+        //setOrderDniResult("Órdenes obtenidas exitosamente.");
       } catch (err) {
         console.log(err);
-        //setOrderResult("Error al obtener las órdenes por DNI.");
+        //setOrderDniResult("Error al obtener las órdenes por DNI.");
       }
     }
   
@@ -146,17 +111,7 @@ function orders() {
   
     return (
       <div className={styles.container}>
-        <div className={styles.operationSection}>
-          <button onClick={handleWhoAmI}>Who Am I?</button>
-          <section id="principal">{principal}</section>
-        </div>
-  
-        <div className={styles.isUserActiveWrapper}>
-          <button onClick={isUserActive}>Check if User is Active</button>
-          {userStatus && <div id="principal" className={styles.userStatus}>{userStatus}</div>}
-        </div>
-  
-  
+
         <div className={styles.orderSection}>
           <h3>Register a New Order</h3>
           <form onSubmit={handleRegisterOrder}> 
@@ -205,8 +160,7 @@ function orders() {
   
               <button type="submit">Get Orders by DNI</button>
             </form>
-            {/* Mostramos el resultado de la consulta, ya sea un mensaje de éxito o error */}
-            {orderDniResult && <div className={styles.orderResult}>{orderDniResult}</div>}
+
   
             <div className={styles.orderSection}>
               {ordersDni.length > 0 ? (

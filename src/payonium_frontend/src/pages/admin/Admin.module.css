@@ -10,9 +10,9 @@
   
 }
 
-
 .adminContent h2 {
   margin-top: 100px; 
-  text-align: left;  
-  margin-left: 350px; 
+  text-align: center;  
+  margin-left: 150px; 
+  width: calc(100% - 280px);
 }
