@@ -10,10 +10,14 @@ function Profile() {
 
   let canisterId = process.env.CANISTER_ID_PAYONIUM_BACKEND;
 
+  const host = process.env.DFX_NETWORK === "ic"
+    ? "https://icp0.io"
+    : "http://localhost:4943";
+
   let backend = createActor(canisterId, {
     agentOptions: {
       identity: identity,
-      host: "http://localhost:4943",
+      host: "host",
     },
   });
 
@@ -46,17 +50,17 @@ function Profile() {
       return;
     }
 
-    const userPrincipalText = identity.getPrincipal().toText(); 
+    const userPrincipalText = identity.getPrincipal().toText();
 
     try {
       console.log("respuesta a analizar")
-      const result = await backend.getMyProfile(userPrincipalText); 
+      const result = await backend.getMyProfile(userPrincipalText);
       console.log(result);
 
       if (result.ok && result.ok.profile) {
         console.log('Perfil recibido:', result.ok.profile);
-        setUserProfile(result.ok.profile); 
-        setError(null); 
+        setUserProfile(result.ok.profile);
+        setError(null);
       } else {
         alert("No se encontró el perfil del usuario.");
       }
@@ -126,30 +130,30 @@ function Profile() {
   }
 
 
-    // Función para verificar si el usuario está activo
-    async function isUserActive() {
-      if (!isAuthenticated) {
-        alert("Debe estar logueado para verificar el estado del usuario.");
-        return;
-      }
-  
-      const userPrincipalText = identity.getPrincipal().toText();
-  
-      try {
-        const result = await backend.isUserActive(userPrincipalText);
-        if (result) {
-          //alert(result ? "El usuario está activo." : "El usuario no está activo.");
-          setUserStatus("El usuario esta activo");
-        } else {
-          //alert("No se pudo verificar el estado del usuario.");
-          setUserStatus("El usuario no esta activo")
-        }
-      } catch (err) {
-        console.log(err);
-        //alert("Error al verificar el estado del usuario.");
-        setUserStatus("Error al verificar el estado del usuario");
-      }
+  // Función para verificar si el usuario está activo
+  async function isUserActive() {
+    if (!isAuthenticated) {
+      alert("Debe estar logueado para verificar el estado del usuario.");
+      return;
     }
+
+    const userPrincipalText = identity.getPrincipal().toText();
+
+    try {
+      const result = await backend.isUserActive(userPrincipalText);
+      if (result) {
+        //alert(result ? "El usuario está activo." : "El usuario no está activo.");
+        setUserStatus("El usuario esta activo");
+      } else {
+        //alert("No se pudo verificar el estado del usuario.");
+        setUserStatus("El usuario no esta activo")
+      }
+    } catch (err) {
+      console.log(err);
+      //alert("Error al verificar el estado del usuario.");
+      setUserStatus("Error al verificar el estado del usuario");
+    }
+  }
 
   return (
     <div className={styles.container}>

@@ -10,11 +10,15 @@ function orders() {
     const { isAuthenticated, identity } = useContext(AuthContext);
   
     let canisterId = process.env.CANISTER_ID_PAYONIUM_BACKEND;
+
+    const host = process.env.DFX_NETWORK === "ic"
+      ? "https://icp0.io"
+      : "http://localhost:4943";
   
-    const backend = createActor(canisterId, {
+    let backend = createActor(canisterId, {
       agentOptions: {
         identity: identity,
-        host: "http://localhost:4943",
+        host: "host",
       },
     });
   

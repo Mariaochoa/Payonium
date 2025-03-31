@@ -11,10 +11,14 @@ function Transaction() {
 
   let canisterId = process.env.CANISTER_ID_PAYONIUM_BACKEND;
 
-  const backend = createActor(canisterId, {
+  const host = process.env.DFX_NETWORK === "ic"
+    ? "https://icp0.io"
+    : "http://localhost:4943";
+
+  let backend = createActor(canisterId, {
     agentOptions: {
       identity: identity,
-      host: "http://localhost:4943",
+      host: "host",
     },
   });
 
