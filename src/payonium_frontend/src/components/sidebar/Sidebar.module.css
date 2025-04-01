@@ -1,0 +1,42 @@
+.sidebar {
+    width: 150px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 60px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin: 15px 0;
+  }
+  
+  .sidebar a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+  }
+  
+  .sidebar a:hover {
+    color: #007BFF;
+  }
+  
+  /* Estilo para el enlace activo */
+  .sidebar .active {
+    color: white;
+    background-color: #201a5e; /* O el color que prefieras */
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .adminContent h2 {
+  color: #007BFF;
+  font-size: 24px;
+  margin-bottom: 20px;
+}

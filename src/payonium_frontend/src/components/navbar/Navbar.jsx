@@ -2,20 +2,23 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
     const { isAuthenticated, login, logout } = useContext(AuthContext)
+    const navigate = useNavigate();
 
     const handleLogout = (e) => {
         e.preventDefault();
         logout();
+        navigate('/');
         
     }
     return (
         <nav className={styles.navbar}>
             <div>
-                <img src="/logopy.png" className={styles.navbarlogo} alt="logo" />
+                <img src="/logopy2.png" className={styles.navbarlogo} alt="logo" />
             </div>
 
             <ul className={styles.navbarLinks}>
@@ -24,7 +27,8 @@ const Navbar = () => {
                 {isAuthenticated && (
                     <>
                         <li><Link to='profile'>Profile</Link></li>
-                        <li><Link to='operation'>Operations</Link></li>
+                        <li><Link to='transaction'>Transaction</Link></li>
+                        <li><Link to='admin'>Admin</Link></li>
                     </>
                 )}
                 <li><Link to='about'>About</Link></li>

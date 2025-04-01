@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-
 import { AuthContext } from './context/AuthContext';
 import { createActor } from 'declarations/payonium_backend';
 import './App.css';
@@ -17,7 +16,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Router />
-        <Apptemp />
+        {/* <Apptemp /> */}
       </BrowserRouter>
 
     </div>

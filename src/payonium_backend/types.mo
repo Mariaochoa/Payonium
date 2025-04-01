@@ -1,5 +1,6 @@
 
 import Result "mo:base/Result";
+import Principal "mo:base/Principal";
 
 module Types {
 
@@ -21,7 +22,17 @@ module Types {
         password: Text;
         countryresidence: Text;
         owner: Principal;
-        role: Text;
+        role: Text;  
+        principal: Text;  
+        //status: Bool;    
+    };
+
+    public type Account = {
+        namebankaccount: Text;
+        simpleaccountnumber: Text;
+        longaccountnumber: Text;
+        depositcurrency: Text;
+        owner: Principal;
     };
 
     type GetProfileResultOk = {
@@ -29,6 +40,12 @@ module Types {
         #profiles: [Profile];
         #userSuccessfullyAdded;
         #userSuccessfullyDeleted;
+
+        #account: Account;
+        #accounts: [Account];
+        #accountSuccessfullyAdded;
+        #accountSuccessfullyDeleted;
+        #accountSuccessfullyUpdated;
     };
 
     type GetProfileResultErr = { 
@@ -36,10 +53,45 @@ module Types {
         #userNotAuthenticated;
         #unregisteredUser_nameOrEmailIsInvalid;
         #countryDataNotFound;
-        #unregisteredUser_invelidRole
+        #unregisteredUser_invelidRole;
+        #userAlreadyExists;
+
+        #invalidAccount;
+        #noAccountFound;
+        #youAreNotTheOwnerOfThisAccount;
     };
 
     public type GetProfileResult = Result.Result<GetProfileResultOk, GetProfileResultErr>;
+
+    public type Order = {
+        amount: Nat;
+        currency: Text;
+        account: Text;
+        description: Text;
+        dni: Text;
+        email: Text;
+        owner: Principal;
+    };
+
+type GetOrderResultOk = {
+        #order: Order;
+        #orders: [Order];
+        #orderSuccessfullyAdded;
+        #orderSuccessfullyComplete;
+
+    };
+
+    type GetOrderResultErr = { 
+        #userNotAuthenticated;
+        #userDoesNotExist;
+        #invalidOrder;
+        #noOrderFound;
+        #youAreNotTheOwnerOfThisOrder;
+
+        #userDoesNotActiveOrNotExist;
+    };
+
+    public type GetOrderResult = Result.Result<GetOrderResultOk, GetOrderResultErr>;
 
 
 }

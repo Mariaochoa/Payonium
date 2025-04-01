@@ -4,13 +4,16 @@ import styles from "./Home.module.css"; // Asegúrate de tener los estilos corre
 const Home = () => {
   return (
     <div className={styles.container}>
+
+      <img src="/logopy.png" alt="PAYONIUM logo" className={styles.logopayonium2}/>
+
       <h1 className={styles.title}>Bienvenido a Payonium</h1>
       <p className={styles.subtitle}>Transformando los pagos transfronterizos para tu negocio</p>
 
       <section className={styles.section}>
         <div className={styles.imageContainer}>
           <img
-            src="/payment-processing.jpg"
+            src="/AdobeStock_1046552719.jpeg"
             alt="Procesamiento de pagos"
             className={styles.image}
           />
@@ -42,7 +45,7 @@ const Home = () => {
         </div>
         <div className={styles.imageContainer}>
           <img
-            src="/payment-solutions.jpg"
+            src="/AdobeStock_1059468704.jpeg"
             alt="Soluciones de pago"
             className={styles.image}
           />
@@ -52,7 +55,7 @@ const Home = () => {
       <section className={styles.section}>
         <div className={styles.imageContainer}>
           <img
-            src="/payment-options.png"
+            src="/AdobeStock_1063684972.jpeg"
             alt="Opciones de pago"
             className={styles.image}
           />
